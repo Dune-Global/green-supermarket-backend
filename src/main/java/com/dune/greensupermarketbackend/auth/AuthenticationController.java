@@ -1,8 +1,8 @@
 package com.dune.greensupermarketbackend.auth;
 
 import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
-import com.dune.greensupermarketbackend.admin.AdminRegisterRequest;
-import com.dune.greensupermarketbackend.customer.CustomerAuthenticationRequest;
+import com.dune.greensupermarketbackend.admin.AdminDto;
+import com.dune.greensupermarketbackend.customer.CustomerDto;
 import com.dune.greensupermarketbackend.customer.CustomerRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     //Admin
     @PostMapping("admins/register")
-    public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody AdminRegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody AdminDto request) {
         return new ResponseEntity<>(service.registerAdmin(request), HttpStatus.CREATED);
     }
     @PostMapping("admins/authentication")
@@ -34,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("customer/authentication")
-    public ResponseEntity<AuthenticationResponse> authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticateCustomer(@RequestBody CustomerDto request){
             return ResponseEntity.ok(service.authenticateCustomer(request));
     }
 }

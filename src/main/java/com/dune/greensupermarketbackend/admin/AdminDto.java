@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminRegisterRequest {
+public class AdminDto {
     private String empId;
     private String firstname;
     private String lastname;

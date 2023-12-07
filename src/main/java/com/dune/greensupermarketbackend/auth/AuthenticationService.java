@@ -2,10 +2,10 @@ package com.dune.greensupermarketbackend.auth;
 
 import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
 import com.dune.greensupermarketbackend.admin.AdminEntity;
-import com.dune.greensupermarketbackend.admin.AdminRegisterRequest;
+import com.dune.greensupermarketbackend.admin.AdminDto;
 import com.dune.greensupermarketbackend.admin.AdminRepository;
 import com.dune.greensupermarketbackend.config.JwtService;
-import com.dune.greensupermarketbackend.customer.CustomerAuthenticationRequest;
+import com.dune.greensupermarketbackend.customer.CustomerDto;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import com.dune.greensupermarketbackend.customer.CustomerRegisterRequest;
 import com.dune.greensupermarketbackend.customer.CustomerRepository;
@@ -29,7 +29,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     //Admin
-    public AuthenticationResponse registerAdmin(AdminRegisterRequest request){
+    public AuthenticationResponse registerAdmin(AdminDto request){
         //Check EmpId exist
         if(adminRepository.existsByEmpId(request.getEmpId())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Employee ID Already exists.");
@@ -91,7 +91,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request){
+    public AuthenticationResponse authenticateCustomer(CustomerDto request){
         var customer = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST,"Invalid Email or password"));
 
