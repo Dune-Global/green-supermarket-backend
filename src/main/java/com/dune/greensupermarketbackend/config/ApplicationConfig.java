@@ -4,6 +4,7 @@ import com.dune.greensupermarketbackend.admin.AdminEntity;
 import com.dune.greensupermarketbackend.admin.AdminRepository;
 import com.dune.greensupermarketbackend.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,10 @@ public class ApplicationConfig {
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
 
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {

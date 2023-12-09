@@ -1,14 +1,8 @@
 package com.dune.greensupermarketbackend.auth;
 
-import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
-import com.dune.greensupermarketbackend.admin.AdminEntity;
-import com.dune.greensupermarketbackend.admin.AdminDto;
-import com.dune.greensupermarketbackend.admin.AdminRepository;
+import com.dune.greensupermarketbackend.admin.*;
 import com.dune.greensupermarketbackend.config.JwtService;
-import com.dune.greensupermarketbackend.customer.CustomerDto;
-import com.dune.greensupermarketbackend.customer.CustomerEntity;
-import com.dune.greensupermarketbackend.customer.CustomerRegisterRequest;
-import com.dune.greensupermarketbackend.customer.CustomerRepository;
+import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.role.Role;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +23,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     //Admin
-    public AuthenticationResponse registerAdmin(AdminDto request){
+    public AuthenticationResponse registerAdmin(AdminRegisterDto request){
         //Check EmpId exist
         if(adminRepository.existsByEmpId(request.getEmpId())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Employee ID Already exists.");
@@ -72,7 +66,7 @@ public class AuthenticationService {
     }
 
     //Customer
-    public AuthenticationResponse registerCustomer(CustomerRegisterRequest request){
+    public AuthenticationResponse registerCustomer(CustomerRegisterDto request){
         if(customerRepository.existsByEmail(request.getEmail())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Email Already exists");
         }
@@ -91,7 +85,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticateCustomer(CustomerDto request){
+    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request){
         var customer = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST,"Invalid Email or password"));
 
