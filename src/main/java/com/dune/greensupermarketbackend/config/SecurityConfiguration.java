@@ -26,7 +26,7 @@ public class SecurityConfiguration {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
-                    authorize.requestMatchers("/api/v1/auth/**").permitAll();
+                    authorize.requestMatchers("/api/v1/auth/**", "/api/v1/admins/**", "/api/v1/customers/**").permitAll();//Remove admin and customer in production
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 

@@ -9,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminDto {
+public class AdminRegisterDto {
     private String empId;
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
     private String designation;
     private String phoneNumber;
     private String role;
