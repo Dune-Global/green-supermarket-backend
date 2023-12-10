@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/"+ ApiVersionConfig.API_VERSION +"/auth")
+@RequestMapping("/api/"+ ApiVersionConfig.API_VERSION)
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -31,12 +31,12 @@ public class AuthenticationController {
     }
 
     //Customer
-    @PostMapping("customer/register")
+    @PostMapping("customers/register")
     public ResponseEntity<AuthenticationResponse> registerCustomer(@RequestBody CustomerRegisterDto request){
             return new ResponseEntity<>(service.registerCustomer(request),HttpStatus.CREATED);
     }
 
-    @PostMapping("customer/authentication")
+    @PostMapping("customers/authentication")
     public ResponseEntity<AuthenticationResponse> authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
             return ResponseEntity.ok(service.authenticateCustomer(request));
     }
