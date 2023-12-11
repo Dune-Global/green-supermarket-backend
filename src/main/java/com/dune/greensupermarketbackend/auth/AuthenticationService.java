@@ -12,6 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -22,11 +26,25 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private Map<String,Object> customerExtraClaims(CustomerEntity customer) {
+        Map<String, Object> customerExtraClaims = new HashMap<>();
+        customerExtraClaims.put("id", customer.getId());
+        customerExtraClaims.put("firstname", customer.getFirstname());
+        customerExtraClaims.put("lastname", customer.getLastname());
+        customerExtraClaims.put("email", customer.getEmail());
+        customerExtraClaims.put("role", customer.getRole().toString());
+
+        return customerExtraClaims;
+    }
+
     //Admin
     public AuthenticationResponse registerAdmin(AdminRegisterDto request){
         //Check EmpId exist
         if(adminRepository.existsByEmpId(request.getEmpId())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Employee ID Already exists.");
+        }
+        if(adminRepository.existsByEmail(request.getEmail())){
+            throw new APIException(HttpStatus.BAD_REQUEST,"Employee Email Already exists.");
         }
 
         var admin = AdminEntity.builder()
@@ -40,9 +58,10 @@ public class AuthenticationService {
                 .role(Role.valueOf(request.getRole()))
                 .build();
         adminRepository.save(admin);
-        var jwtToken = jwtService.generateToken(admin);
+//        var jwtToken = jwtService.generateToken(admin);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+//                .token(jwtToken)
+                .message("Register Successfully")
                 .build();
     }
 
@@ -59,9 +78,18 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var jwtToken = jwtService.generateToken(admin);
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("empId", admin.getEmpId());
+        extraClaims.put("firstname", admin.getFirstname());
+        extraClaims.put("lastname", admin.getLastname());
+        extraClaims.put("email", admin.getEmail());
+        extraClaims.put("roles", admin.getRole());
+
+        var jwtToken = jwtService.generateToken(extraClaims,admin);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Login Successful")
                 .build();
     }
 
@@ -70,6 +98,7 @@ public class AuthenticationService {
         if(customerRepository.existsByEmail(request.getEmail())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Email Already exists");
         }
+
         var customer = CustomerEntity.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -79,9 +108,12 @@ public class AuthenticationService {
                 .role(Role.CUSTOMER)
                 .build();
         customerRepository.save(customer);
-        var jwtToken = jwtService.generateToken((customer));
+
+        Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
+        var jwtToken = jwtService.generateToken(customerExtraClaims, customer);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Register Successfully")
                 .build();
     }
 
@@ -98,9 +130,12 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var jwtToken = jwtService.generateToken(customer);
+
+        Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
+        var jwtToken = jwtService.generateToken(customerExtraClaims, customer);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Login Successfully")
                 .build();
     }
 
