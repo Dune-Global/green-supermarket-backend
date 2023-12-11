@@ -2,10 +2,10 @@ package com.dune.greensupermarketbackend.auth;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
 import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
-import com.dune.greensupermarketbackend.admin.AdminDto;
+import com.dune.greensupermarketbackend.admin.AdminAuthorizationResponse;
 import com.dune.greensupermarketbackend.admin.AdminRegisterDto;
 import com.dune.greensupermarketbackend.customer.CustomerAuthenticationRequest;
-import com.dune.greensupermarketbackend.customer.CustomerDto;
+import com.dune.greensupermarketbackend.customer.CustomerAuthorizationResponse;
 import com.dune.greensupermarketbackend.customer.CustomerRegisterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/"+ ApiVersionConfig.API_VERSION)
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthController {
 
-    private final AuthenticationService service;
+    private final AuthService service;
 
     //Admin
     @PostMapping("admins/register")
@@ -30,6 +30,16 @@ public class AuthenticationController {
             return ResponseEntity.ok(service.authenticateAdmin(request));
     }
 
+    @GetMapping("admins/auth")
+    public ResponseEntity<AdminAuthorizationResponse> authorizeAdmin(@RequestHeader("Authorization") String token){
+
+    // Remove the "Bearer " prefix from the token
+    if (token != null && token.startsWith("Bearer ")) {
+        token = token.substring(7);
+    }
+    return ResponseEntity.ok(service.authorizeAdmin(token));
+    }
+
     //Customer
     @PostMapping("customers/register")
     public ResponseEntity<AuthenticationResponse> registerCustomer(@RequestBody CustomerRegisterDto request){
@@ -39,5 +49,15 @@ public class AuthenticationController {
     @PostMapping("customers/authentication")
     public ResponseEntity<AuthenticationResponse> authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
             return ResponseEntity.ok(service.authenticateCustomer(request));
+    }
+
+    @GetMapping("customers/auth")
+    public ResponseEntity<CustomerAuthorizationResponse> authorizeCustomer(@RequestHeader("Authorization") String token){
+
+    // Remove the "Bearer " prefix from the token
+    if (token != null && token.startsWith("Bearer ")) {
+        token = token.substring(7);
+    }
+    return ResponseEntity.ok(service.authorizeCustomer(token));
     }
 }

@@ -5,6 +5,7 @@ import com.dune.greensupermarketbackend.config.JwtService;
 import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.role.Role;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,11 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthService {
 
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
@@ -138,5 +138,32 @@ public class AuthenticationService {
                 .message("Login Successfully")
                 .build();
     }
+
+    public AdminAuthorizationResponse authorizeAdmin(String token) {
+    Claims claims = jwtService.extractAllClaims(token);
+
+    AdminAuthorizationResponse response = new AdminAuthorizationResponse();
+    response.setEmpId((String) claims.get("empId"));
+    response.setFirstname((String) claims.get("firstname"));
+    response.setLastname((String) claims.get("lastname"));
+    response.setEmail((String) claims.get("email"));
+    response.setRoles((String) claims.get("roles"));
+
+    return response;
+    }
+
+    public CustomerAuthorizationResponse authorizeCustomer(String token) {
+        Claims claims = jwtService.extractAllClaims(token);
+
+        CustomerAuthorizationResponse response = new CustomerAuthorizationResponse();
+        response.setId(Integer.toString((Integer) claims.get("id")));
+        response.setFirstname((String) claims.get("firstname"));
+        response.setLastname((String) claims.get("lastname"));
+        response.setEmail((String) claims.get("email"));
+        response.setRole((String) claims.get("role"));
+
+        return response;
+    }
+
 
 }
