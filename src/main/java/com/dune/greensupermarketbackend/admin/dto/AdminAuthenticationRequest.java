@@ -1,4 +1,4 @@
-package com.dune.greensupermarketbackend.admin;
+package com.dune.greensupermarketbackend.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
