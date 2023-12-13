@@ -1,9 +1,9 @@
 package com.dune.greensupermarketbackend.auth;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
-import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
-import com.dune.greensupermarketbackend.admin.AdminAuthorizationResponse;
-import com.dune.greensupermarketbackend.admin.AdminRegisterDto;
+import com.dune.greensupermarketbackend.admin.dto.AdminAuthenticationRequest;
+import com.dune.greensupermarketbackend.admin.dto.AdminAuthorizationResponse;
+import com.dune.greensupermarketbackend.admin.dto.AdminRegisterDto;
 import com.dune.greensupermarketbackend.customer.CustomerAuthenticationRequest;
 import com.dune.greensupermarketbackend.customer.CustomerAuthorizationResponse;
 import com.dune.greensupermarketbackend.customer.CustomerRegisterDto;

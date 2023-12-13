@@ -1,6 +1,6 @@
 package com.dune.greensupermarketbackend.admin.service.impl;
 
-import com.dune.greensupermarketbackend.admin.AdminDto;
+import com.dune.greensupermarketbackend.admin.dto.AdminDto;
 import com.dune.greensupermarketbackend.admin.AdminEntity;
 import com.dune.greensupermarketbackend.admin.AdminRepository;
 import com.dune.greensupermarketbackend.admin.service.AdminService;

@@ -1,6 +1,7 @@
 package com.dune.greensupermarketbackend.admin;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
+import com.dune.greensupermarketbackend.admin.dto.AdminDto;
 import com.dune.greensupermarketbackend.admin.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class AdminController {
     private AdminService adminService;
 
     //Get admin by
-    @GetMapping("{empId}")
+    @GetMapping("/search-admins/{empId}")
     public ResponseEntity<AdminDto> getAdmin(@PathVariable("empId") String empId){
         AdminDto adminDto = adminService.getAdmin(empId);
         return new ResponseEntity<>(adminDto, HttpStatus.OK);
