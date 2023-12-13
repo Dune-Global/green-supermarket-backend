@@ -8,4 +8,6 @@ public interface AdminRepository extends JpaRepository<AdminEntity, Integer> {
     Optional<AdminEntity> findByEmpId(String empId);
 
     Boolean existsByEmpId(String empId);
+
+    Boolean existsByEmail(String email);
 }

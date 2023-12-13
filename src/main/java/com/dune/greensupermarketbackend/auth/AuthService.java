@@ -1,16 +1,14 @@
 package com.dune.greensupermarketbackend.auth;
 
-import com.dune.greensupermarketbackend.admin.AdminAuthenticationRequest;
-import com.dune.greensupermarketbackend.admin.AdminEntity;
-import com.dune.greensupermarketbackend.admin.AdminDto;
-import com.dune.greensupermarketbackend.admin.AdminRepository;
+import com.dune.greensupermarketbackend.admin.*;
+import com.dune.greensupermarketbackend.admin.dto.AdminAuthenticationRequest;
+import com.dune.greensupermarketbackend.admin.dto.AdminAuthorizationResponse;
+import com.dune.greensupermarketbackend.admin.dto.AdminRegisterDto;
 import com.dune.greensupermarketbackend.config.JwtService;
-import com.dune.greensupermarketbackend.customer.CustomerDto;
-import com.dune.greensupermarketbackend.customer.CustomerEntity;
-import com.dune.greensupermarketbackend.customer.CustomerRegisterRequest;
-import com.dune.greensupermarketbackend.customer.CustomerRepository;
+import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.role.Role;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,9 +16,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthService {
 
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
@@ -28,11 +29,25 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private Map<String,Object> customerExtraClaims(CustomerEntity customer) {
+        Map<String, Object> customerExtraClaims = new HashMap<>();
+        customerExtraClaims.put("id", customer.getId());
+        customerExtraClaims.put("firstname", customer.getFirstname());
+        customerExtraClaims.put("lastname", customer.getLastname());
+        customerExtraClaims.put("email", customer.getEmail());
+        customerExtraClaims.put("role", customer.getRole().toString());
+
+        return customerExtraClaims;
+    }
+
     //Admin
-    public AuthenticationResponse registerAdmin(AdminDto request){
+    public AuthenticationResponse registerAdmin(AdminRegisterDto request){
         //Check EmpId exist
         if(adminRepository.existsByEmpId(request.getEmpId())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Employee ID Already exists.");
+        }
+        if(adminRepository.existsByEmail(request.getEmail())){
+            throw new APIException(HttpStatus.BAD_REQUEST,"Employee Email Already exists.");
         }
 
         var admin = AdminEntity.builder()
@@ -46,9 +61,10 @@ public class AuthenticationService {
                 .role(Role.valueOf(request.getRole()))
                 .build();
         adminRepository.save(admin);
-        var jwtToken = jwtService.generateToken(admin);
+//        var jwtToken = jwtService.generateToken(admin);
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+//                .token(jwtToken)
+                .message("Register Successfully")
                 .build();
     }
 
@@ -65,17 +81,27 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var jwtToken = jwtService.generateToken(admin);
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("empId", admin.getEmpId());
+        extraClaims.put("firstname", admin.getFirstname());
+        extraClaims.put("lastname", admin.getLastname());
+        extraClaims.put("email", admin.getEmail());
+        extraClaims.put("roles", admin.getRole());
+
+        var jwtToken = jwtService.generateToken(extraClaims,admin);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Login Successful")
                 .build();
     }
 
     //Customer
-    public AuthenticationResponse registerCustomer(CustomerRegisterRequest request){
+    public AuthenticationResponse registerCustomer(CustomerRegisterDto request){
         if(customerRepository.existsByEmail(request.getEmail())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Email Already exists");
         }
+
         var customer = CustomerEntity.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -85,13 +111,16 @@ public class AuthenticationService {
                 .role(Role.CUSTOMER)
                 .build();
         customerRepository.save(customer);
-        var jwtToken = jwtService.generateToken((customer));
+
+        Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
+        var jwtToken = jwtService.generateToken(customerExtraClaims, customer);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Register Successfully")
                 .build();
     }
 
-    public AuthenticationResponse authenticateCustomer(CustomerDto request){
+    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request){
         var customer = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST,"Invalid Email or password"));
 
@@ -104,10 +133,40 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var jwtToken = jwtService.generateToken(customer);
+
+        Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
+        var jwtToken = jwtService.generateToken(customerExtraClaims, customer);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .message("Login Successfully")
                 .build();
     }
+
+    public AdminAuthorizationResponse authorizeAdmin(String token) {
+    Claims claims = jwtService.extractAllClaims(token);
+
+    AdminAuthorizationResponse response = new AdminAuthorizationResponse();
+    response.setEmpId((String) claims.get("empId"));
+    response.setFirstname((String) claims.get("firstname"));
+    response.setLastname((String) claims.get("lastname"));
+    response.setEmail((String) claims.get("email"));
+    response.setRoles((String) claims.get("roles"));
+
+    return response;
+    }
+
+    public CustomerAuthorizationResponse authorizeCustomer(String token) {
+        Claims claims = jwtService.extractAllClaims(token);
+
+        CustomerAuthorizationResponse response = new CustomerAuthorizationResponse();
+        response.setId(Integer.toString((Integer) claims.get("id")));
+        response.setFirstname((String) claims.get("firstname"));
+        response.setLastname((String) claims.get("lastname"));
+        response.setEmail((String) claims.get("email"));
+        response.setRole((String) claims.get("role"));
+
+        return response;
+    }
+
 
 }

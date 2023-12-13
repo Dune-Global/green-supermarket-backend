@@ -1,4 +1,4 @@
-package com.dune.greensupermarketbackend.admin;
+package com.dune.greensupermarketbackend.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminDto {
+public class AdminRegisterDto {
     private String empId;
     private String firstname;
     private String lastname;

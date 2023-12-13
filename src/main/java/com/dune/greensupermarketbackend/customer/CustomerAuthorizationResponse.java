@@ -1,17 +1,15 @@
 package com.dune.greensupermarketbackend.customer;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto {
+public class CustomerAuthorizationResponse {
+    private String id;
     private String firstname;
     private String lastname;
     private String email;
-    private String phoneNumber;
+    private String role;
 }
