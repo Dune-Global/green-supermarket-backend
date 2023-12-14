@@ -4,10 +4,14 @@ import com.dune.greensupermarketbackend.admin.dto.AdminDto;
 import com.dune.greensupermarketbackend.admin.AdminEntity;
 import com.dune.greensupermarketbackend.admin.AdminRepository;
 import com.dune.greensupermarketbackend.admin.service.AdminService;
+import com.dune.greensupermarketbackend.auth.PasswordUpdateRequest;
+import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.exception.ResourceNotFoundException;
 import com.dune.greensupermarketbackend.role.Role;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +22,13 @@ public class AdminServiceImpl implements AdminService {
 
     private AdminRepository adminRepository;
     private ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository, ModelMapper modelMapper) {
+    public AdminServiceImpl(AdminRepository adminRepository, ModelMapper modelMapper,PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private AdminEntity checkForAdmin(String empId){
@@ -59,6 +65,16 @@ public class AdminServiceImpl implements AdminService {
 
         AdminEntity updatedAdmin = adminRepository.save(admin);
         return modelMapper.map(updatedAdmin,AdminDto.class);
+    }
+
+    @Override
+    public void updatePassword(String empId, PasswordUpdateRequest passwordUpdateRequest) {
+        AdminEntity admin = checkForAdmin(empId);
+        if (!passwordEncoder.matches(passwordUpdateRequest.getCurrentPassword(), admin.getPassword())) {
+            throw new APIException(HttpStatus.BAD_REQUEST,"Current password does not match");
+        }
+        admin.setPassword(passwordEncoder.encode(passwordUpdateRequest.getNewPassword()));
+        adminRepository.save(admin);
     }
 
     @Override
