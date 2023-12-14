@@ -1,12 +1,17 @@
 package com.dune.greensupermarketbackend.customer.service.impl;
 
+import com.dune.greensupermarketbackend.admin.AdminEntity;
+import com.dune.greensupermarketbackend.auth.PasswordUpdateRequest;
 import com.dune.greensupermarketbackend.customer.CustomerDto;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import com.dune.greensupermarketbackend.customer.CustomerRepository;
 import com.dune.greensupermarketbackend.customer.service.CustomerService;
+import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +22,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private CustomerEntity checkForCustomer(Integer id){
@@ -54,6 +61,17 @@ public class CustomerServiceImpl implements CustomerService {
 
         CustomerEntity updatedCustomer = customerRepository.save(customer);
         return modelMapper.map(updatedCustomer,CustomerDto.class);
+    }
+
+    @Override
+    public void updatePassword(Integer customerId, PasswordUpdateRequest passwordUpdateRequest) {
+
+        CustomerEntity customer = checkForCustomer(customerId);
+        if (!passwordEncoder.matches(passwordUpdateRequest.getCurrentPassword(), customer.getPassword())) {
+            throw new APIException(HttpStatus.BAD_REQUEST,"Current password does not match");
+        }
+        customer.setPassword(passwordEncoder.encode(passwordUpdateRequest.getNewPassword()));
+        customerRepository.save(customer);
     }
 
     @Override
