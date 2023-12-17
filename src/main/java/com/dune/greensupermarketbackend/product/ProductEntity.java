@@ -34,7 +34,7 @@ public class ProductEntity {
     @Column(name = "stock-available-units", nullable = false)
     private Integer stockAvailableUnits;
 
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "brand-id", nullable = false)
-     private BrandEntity brand;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand-id", nullable = false)
+    private BrandEntity brand;
 }
