@@ -1,10 +1,5 @@
 package com.dune.greensupermarketbackend.customer.address;
 
-import com.dune.greensupermarketbackend.customer.CustomerEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
