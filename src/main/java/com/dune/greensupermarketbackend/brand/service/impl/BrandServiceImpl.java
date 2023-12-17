@@ -58,7 +58,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<BrandDto> getAllBrands() {
         List<BrandEntity> brands = brandRepository.findAll();
-        return brands.stream().map((brand) -> modelMapper.map(brand, BrandDto.class)).collect(Collectors.toList());
+        return brands.stream().map(brand -> modelMapper.map(brand, BrandDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BrandServiceImpl implements BrandService {
     public BrandResponseMessageDto deleteBrand(Integer brandId) {
         BrandEntity brand = checkBrand(brandId);
         brandRepository.delete(brand);
-        return new BrandResponseMessageDto(brand.getBrandName() + " deleted successful!");
+        return new BrandResponseMessageDto(brand.getBrandName() + " deleted successfully!");
     }
 
 }
