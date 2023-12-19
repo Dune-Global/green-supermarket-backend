@@ -1,5 +1,6 @@
 package com.dune.greensupermarketbackend.customer;
 
+import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,9 @@ public class CustomerEntity implements UserDetails {
 
     @Column(name="phone-number")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AddressEntity> addresses;
 
     @Enumerated(EnumType.STRING)
     private Role role;

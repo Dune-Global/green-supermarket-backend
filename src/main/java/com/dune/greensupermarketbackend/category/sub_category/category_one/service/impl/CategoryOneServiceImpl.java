@@ -3,6 +3,8 @@ package com.dune.greensupermarketbackend.category.sub_category.category_one.serv
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -69,17 +71,35 @@ public class CategoryOneServiceImpl implements CategoryOneService {
         validateString(updateCategory.getSubCatOneDescription(), "Category description cannot be empty!");
 
         CategoryOneEntity category = checkCategoryOne(subCatOneId);
+
+        MainCategoryEntity mainCategoryEntity = mainCategoryRepository.findById(updateCategory.getMainCategoryId())
+                .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Main category not found!"));
+        category.setMainCategory(mainCategoryEntity);
+
         category.setSubCatOneName(updateCategory.getSubCatOneName());
         category.setSubCatOneDescription(updateCategory.getSubCatOneDescription());
+
         categoryOneRepository.save(category);
         return new CategoryOneResponseMessageDto(updateCategory.getSubCatOneName() + " update successful!");
     }
 
     @Override
-    public CategoryOneResponseMessageDto deleteBrand(Integer subCatOneId) {
+    public CategoryOneResponseMessageDto deleteCategory(Integer subCatOneId) {
         CategoryOneEntity category = checkCategoryOne(subCatOneId);
         categoryOneRepository.delete(category);
         return new CategoryOneResponseMessageDto(category.getSubCatOneName() + " deleted successfully!");
+    }
+
+    @Override
+    public List<CategoryOneDto> getAllByMainCategory(Integer mainCatId) {
+//        Boolean isExists = categoryOneRepository.existsByMainCategory_Id(mainCatId);
+//        System.out.println(isExists);
+
+        List<CategoryOneEntity> categoryOneEntities = categoryOneRepository.findByMainCategoryMainCategoryId(mainCatId);
+
+        return categoryOneEntities.stream().map(
+                categoryOneEntity -> modelMapper.map(categoryOneEntity, CategoryOneDto.class)
+        ).collect(Collectors.toList());
     }
 
 }

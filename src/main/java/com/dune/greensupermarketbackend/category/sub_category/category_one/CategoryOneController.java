@@ -65,7 +65,13 @@ public class CategoryOneController {
     @DeleteMapping("delete-category/{subCatOneId}")
     public ResponseEntity<CategoryOneResponseMessageDto> deleteCategory(
             @PathVariable("subCatOneId") Integer subCatOneId) {
-        CategoryOneResponseMessageDto categoryOneResponseMessageDto = categoryOneService.deleteBrand(subCatOneId);
+        CategoryOneResponseMessageDto categoryOneResponseMessageDto = categoryOneService.deleteCategory(subCatOneId);
         return new ResponseEntity<>(categoryOneResponseMessageDto, HttpStatus.OK);
+    }
+
+    @GetMapping("main-category/{main-id}")
+    public ResponseEntity<List<CategoryOneDto>> getByMainCategory(@PathVariable("main-id") Integer mainCategoryId){
+        List<CategoryOneDto> categoryOneDtos = categoryOneService.getAllByMainCategory(mainCategoryId);
+        return ResponseEntity.ok(categoryOneDtos);
     }
 }

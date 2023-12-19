@@ -2,11 +2,14 @@ package com.dune.greensupermarketbackend.category.sub_category.category_one;
 
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
 
+import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "sub_category_one")
 public class CategoryOneEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sub_one_id")
     private Integer subCatOneId;
 
@@ -25,7 +29,10 @@ public class CategoryOneEntity {
     @Column(name = "sub_one_des", nullable = false)
     private String subCatOneDescription;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryOne", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CategoryTwoEntity> categoryTwos;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "main_category_id", nullable = false)
     private MainCategoryEntity mainCategory;
 }

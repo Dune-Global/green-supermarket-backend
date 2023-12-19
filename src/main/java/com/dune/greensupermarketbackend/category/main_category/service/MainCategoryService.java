@@ -15,6 +15,6 @@ public interface MainCategoryService {
 
     public MainCategoryResponseMessageDto updateCategory(Integer mainCategoryId, MainCategoryDto updateCategory);
 
-    public MainCategoryResponseMessageDto deleteBrand(Integer mainCategoryId);
+    public MainCategoryResponseMessageDto deleteCategory(Integer mainCategoryId);
 
 }

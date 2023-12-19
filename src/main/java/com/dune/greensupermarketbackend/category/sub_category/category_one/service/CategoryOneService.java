@@ -15,7 +15,7 @@ public interface CategoryOneService {
 
     CategoryOneResponseMessageDto updateCategory(Integer subCatOneId, CategoryOneDto updateCategory);
 
-    CategoryOneResponseMessageDto deleteBrand(Integer subCatOneId);
+    CategoryOneResponseMessageDto deleteCategory(Integer subCatOneId);
 
-    
+    List<CategoryOneDto> getAllByMainCategory(Integer mainCatId);
 }
