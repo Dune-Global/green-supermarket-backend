@@ -12,3 +12,15 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+  azure:
+    storage:
+      container:
+        name: greensupermarketblogcontainer
+      connection:
+        string: DefaultEndpointsProtocol=https;AccountName=greensupermarketstoreacc;AccountKey=4e9T1x4FiNrKlSUeRC7pO8F6eCxIZfnCLuJxwl5o3XkcMiLXGPHd8TV8TaHtUoA0mIXONYGJAt3J+AStSdzMzQ==;EndpointSuffix=core.windows.net
