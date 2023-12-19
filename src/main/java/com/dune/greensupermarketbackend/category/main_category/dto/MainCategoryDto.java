@@ -13,4 +13,5 @@ public class MainCategoryDto {
     private Integer mainCategoryId;
     private String mainCategoryName;
     private String mainCategoryDesc;
+    private String imgUrl;
 }

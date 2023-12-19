@@ -26,6 +26,7 @@ public class MainCategoryEntity {
     @Column(name = "main_category_description", nullable = false)
     private String mainCategoryDesc;
 
+    private String imgUrl;
 
     @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryOneEntity> categoryOnes;

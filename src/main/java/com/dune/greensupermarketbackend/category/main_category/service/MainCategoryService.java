@@ -11,9 +11,9 @@ public interface MainCategoryService {
 
     public MainCategoryDto getCategoryById(Integer mainCategoryId);
 
-    public MainCategoryResponseMessageDto addCategory(MainCategoryDto mainCategoryDto);
+    public MainCategoryResponseMessageDto addCategory(MainCategoryDto mainCategoryDto, String imgUrl);
 
-    public MainCategoryResponseMessageDto updateCategory(Integer mainCategoryId, MainCategoryDto updateCategory);
+    public MainCategoryResponseMessageDto updateCategory(Integer mainCategoryId, MainCategoryDto updateCategory, String imgUrl);
 
     public MainCategoryResponseMessageDto deleteCategory(Integer mainCategoryId);
 

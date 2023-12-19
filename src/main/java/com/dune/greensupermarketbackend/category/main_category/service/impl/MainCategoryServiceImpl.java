@@ -25,8 +25,6 @@ public class MainCategoryServiceImpl implements MainCategoryService {
 
     private MainCategoryRepository mainCategoryRepository;
     private ModelMapper modelMapper;
-    private CategoryOneRepository categoryOneRepository;
-    private CategoryTwoService categoryTwoService;
 
     private MainCategoryEntity checkCategory(Integer mainCategoryId) {
         return mainCategoryRepository.findById(mainCategoryId)
@@ -48,7 +46,7 @@ public class MainCategoryServiceImpl implements MainCategoryService {
     }
 
     @Override
-    public MainCategoryResponseMessageDto addCategory(MainCategoryDto mainCategoryDto) {
+    public MainCategoryResponseMessageDto addCategory(MainCategoryDto mainCategoryDto,String imgUrl) {
         if ("".equals(mainCategoryDto.getMainCategoryName()) || mainCategoryDto.getMainCategoryName() == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Category cannot be empty!");
         }
@@ -58,12 +56,13 @@ public class MainCategoryServiceImpl implements MainCategoryService {
         }
 
         MainCategoryEntity mainCategoryEntity = modelMapper.map(mainCategoryDto, MainCategoryEntity.class);
+        mainCategoryEntity.setImgUrl(imgUrl);
         mainCategoryRepository.save(mainCategoryEntity);
         return new MainCategoryResponseMessageDto(mainCategoryDto.getMainCategoryName() + " added successful!");
     }
 
     @Override
-    public MainCategoryResponseMessageDto updateCategory(Integer mainCategoryId, MainCategoryDto updateCategory) {
+    public MainCategoryResponseMessageDto updateCategory(Integer mainCategoryId, MainCategoryDto updateCategory,String imgUrl) {
         if ("".equals(updateCategory.getMainCategoryName()) || updateCategory.getMainCategoryName() == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Category cannot be empty!");
         }
@@ -71,6 +70,7 @@ public class MainCategoryServiceImpl implements MainCategoryService {
         MainCategoryEntity category = checkCategory(mainCategoryId);
         category.setMainCategoryName(updateCategory.getMainCategoryName());
         category.setMainCategoryDesc(updateCategory.getMainCategoryDesc());
+        category.setImgUrl(imgUrl);
         mainCategoryRepository.save(category);
         return new MainCategoryResponseMessageDto(updateCategory.getMainCategoryName() + " update successful!");
     }

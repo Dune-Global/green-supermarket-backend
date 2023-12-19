@@ -9,15 +9,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
@@ -45,9 +37,9 @@ public class MainCategoryController {
 
     // Add a new category
     @PostMapping("add-category")
-    public ResponseEntity<MainCategoryResponseMessageDto> addCategory(@RequestBody MainCategoryDto mainCategoryDto) {
+    public ResponseEntity<MainCategoryResponseMessageDto> addCategory(@RequestBody MainCategoryDto mainCategoryDto,@RequestHeader("imgUrl") String imgUrl) {
         MainCategoryResponseMessageDto mainCategoryResponseMessageDto = mainCategoryService
-                .addCategory(mainCategoryDto);
+                .addCategory(mainCategoryDto,imgUrl);
         return new ResponseEntity<>(mainCategoryResponseMessageDto, HttpStatus.CREATED);
     }
 
@@ -55,9 +47,10 @@ public class MainCategoryController {
     @PutMapping("update-category/{mainCategoryId}")
     public ResponseEntity<MainCategoryResponseMessageDto> updateCategory(
             @PathVariable("mainCategoryId") Integer mainCategoryId,
-            @RequestBody MainCategoryDto updateCategory) {
+            @RequestBody MainCategoryDto updateCategory,
+            @RequestHeader("imgUrl") String imgUrl) {
         MainCategoryResponseMessageDto mainCategoryResponseMessageDto = mainCategoryService
-                .updateCategory(mainCategoryId, updateCategory);
+                .updateCategory(mainCategoryId, updateCategory,imgUrl);
         return new ResponseEntity<>(mainCategoryResponseMessageDto, HttpStatus.CREATED);
     }
 
