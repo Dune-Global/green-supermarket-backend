@@ -16,6 +16,7 @@ import com.dune.greensupermarketbackend.category.sub_category.category_two.servi
 import com.dune.greensupermarketbackend.exception.APIException;
 
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -74,10 +75,21 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
         return new CategoryTwoResponseMessageDto(updateCategory.getSubCatTwoName() + " update successful!");
     }
 
+    @Transactional
     @Override
-    public CategoryTwoResponseMessageDto deleteBrand(Integer subCatTwoId) {
+    public CategoryTwoResponseMessageDto deleteCategory(Integer subCatTwoId) {
         CategoryTwoEntity category = checkCategoryTwo(subCatTwoId);
         categoryTwoRepository.delete(category);
         return new CategoryTwoResponseMessageDto(category.getSubCatTwoName() + " deleted successfully!");
+    }
+
+    @Override
+    public List<CategoryTwoDto> getAllBySubCatOne(Integer subCatOneId) {
+
+        List<CategoryTwoEntity> categoryTwoEntities = categoryTwoRepository.findByCategoryOneSubCatOneId(subCatOneId);
+
+        return categoryTwoEntities.stream().map(
+                categoryTwoEntity -> modelMapper.map(categoryTwoEntity,CategoryTwoDto.class)
+        ).collect(Collectors.toList());
     }
 }

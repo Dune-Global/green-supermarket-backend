@@ -3,6 +3,8 @@ package com.dune.greensupermarketbackend.category.main_category.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneRepository;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.service.CategoryTwoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import com.dune.greensupermarketbackend.category.main_category.service.MainCateg
 import com.dune.greensupermarketbackend.exception.APIException;
 
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +25,8 @@ public class MainCategoryServiceImpl implements MainCategoryService {
 
     private MainCategoryRepository mainCategoryRepository;
     private ModelMapper modelMapper;
+    private CategoryOneRepository categoryOneRepository;
+    private CategoryTwoService categoryTwoService;
 
     private MainCategoryEntity checkCategory(Integer mainCategoryId) {
         return mainCategoryRepository.findById(mainCategoryId)
@@ -33,7 +38,7 @@ public class MainCategoryServiceImpl implements MainCategoryService {
     public List<MainCategoryDto> getAllCategories() {
         List<MainCategoryEntity> categories = mainCategoryRepository.findAll();
         return categories.stream().map(
-                category -> modelMapper.map(categories, MainCategoryDto.class)).collect(Collectors.toList());
+                category -> modelMapper.map(category, MainCategoryDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -46,11 +51,6 @@ public class MainCategoryServiceImpl implements MainCategoryService {
     public MainCategoryResponseMessageDto addCategory(MainCategoryDto mainCategoryDto) {
         if ("".equals(mainCategoryDto.getMainCategoryName()) || mainCategoryDto.getMainCategoryName() == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Category cannot be empty!");
-        }
-
-        if (mainCategoryRepository.existsById(mainCategoryDto.getMainCategoryId())) {
-            throw new APIException(HttpStatus.BAD_REQUEST,
-                    "Main category already exists with id " + mainCategoryDto.getMainCategoryName() + "!");
         }
 
         MainCategoryEntity mainCategoryEntity = modelMapper.map(mainCategoryDto, MainCategoryEntity.class);
@@ -66,12 +66,15 @@ public class MainCategoryServiceImpl implements MainCategoryService {
 
         MainCategoryEntity category = checkCategory(mainCategoryId);
         category.setMainCategoryName(updateCategory.getMainCategoryName());
+        category.setMainCategoryDesc(updateCategory.getMainCategoryDesc());
         mainCategoryRepository.save(category);
         return new MainCategoryResponseMessageDto(updateCategory.getMainCategoryName() + " update successful!");
     }
 
+
+    @Transactional
     @Override
-    public MainCategoryResponseMessageDto deleteBrand(Integer mainCategoryId) {
+    public MainCategoryResponseMessageDto deleteCategory(Integer mainCategoryId) {
         MainCategoryEntity category = checkCategory(mainCategoryId);
         mainCategoryRepository.delete(category);
         return new MainCategoryResponseMessageDto(category.getMainCategoryName() + " deleted successfully!");

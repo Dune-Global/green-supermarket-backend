@@ -64,7 +64,7 @@ public class MainCategoryController {
     // Delete main category
     @DeleteMapping("delete-category/{mainCategoryId}")
     public ResponseEntity<MainCategoryResponseMessageDto> deleteCategory(@PathVariable("mainCategoryId") Integer mainCategoryId) {
-        MainCategoryResponseMessageDto mainCategoryResponseMessageDto = mainCategoryService.deleteBrand(mainCategoryId);
+        MainCategoryResponseMessageDto mainCategoryResponseMessageDto = mainCategoryService.deleteCategory(mainCategoryId);
         return new ResponseEntity<>(mainCategoryResponseMessageDto , HttpStatus.OK);
     }
 }

@@ -18,17 +18,16 @@ public class CustomerController {
 
     private CustomerService customerService;
 
-
     //Get customer by
     @GetMapping("{id}")
-    public ResponseEntity<CustomerDto> getAdmin(@PathVariable("id") Integer id){
+    public ResponseEntity<CustomerDto> getCustomer(@PathVariable("id") Integer id){
         CustomerDto customerDto = customerService.getCustomer(id);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
     //Get all customer
     @GetMapping
-    public ResponseEntity<List<CustomerDto>> getAllAdmin(){
+    public ResponseEntity<List<CustomerDto>> getCustomers(){
         List<CustomerDto> customers = customerService.getAllCustomer();
         return ResponseEntity.ok(customers);
     }
