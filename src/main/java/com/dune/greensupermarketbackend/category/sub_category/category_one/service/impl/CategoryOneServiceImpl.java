@@ -57,6 +57,11 @@ public class CategoryOneServiceImpl implements CategoryOneService {
         validateString(categoryOneDto.getSubCatOneName(), "Category name cannot be empty!");
         validateString(categoryOneDto.getSubCatOneDescription(), "Category description cannot be empty!");
 
+        if (categoryOneRepository.existsById(categoryOneDto.getSubCatOneId())) {
+            throw new APIException(HttpStatus.BAD_REQUEST,
+                    "Sub category one already exists with id " + categoryOneDto.getSubCatOneId() + "!");
+        }
+
         mainCategoryRepository.findById(categoryOneDto.getMainCategoryId())
                 .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Main category not found!"));
 

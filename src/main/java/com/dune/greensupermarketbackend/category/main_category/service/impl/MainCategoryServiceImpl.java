@@ -52,6 +52,10 @@ public class MainCategoryServiceImpl implements MainCategoryService {
         if ("".equals(mainCategoryDto.getMainCategoryName()) || mainCategoryDto.getMainCategoryName() == null) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Category cannot be empty!");
         }
+        if (mainCategoryRepository.existsById(mainCategoryDto.getMainCategoryId())) {
+            throw new APIException(HttpStatus.BAD_REQUEST,
+                    "Main category already exists with id " + mainCategoryDto.getMainCategoryId() + "!");
+        }
 
         MainCategoryEntity mainCategoryEntity = modelMapper.map(mainCategoryDto, MainCategoryEntity.class);
         mainCategoryRepository.save(mainCategoryEntity);

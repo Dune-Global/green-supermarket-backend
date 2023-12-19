@@ -19,7 +19,6 @@ import java.util.List;
 @Table(name = "sub_category_one")
 public class CategoryOneEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sub_one_id")
     private Integer subCatOneId;
 

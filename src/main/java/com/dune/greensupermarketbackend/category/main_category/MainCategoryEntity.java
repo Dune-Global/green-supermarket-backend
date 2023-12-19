@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name = "main_category")
 public class MainCategoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "main_category_id")
     private Integer mainCategoryId;
 
@@ -26,6 +25,7 @@ public class MainCategoryEntity {
 
     @Column(name = "main_category_description", nullable = false)
     private String mainCategoryDesc;
+
 
     @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryOneEntity> categoryOnes;

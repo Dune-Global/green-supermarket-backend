@@ -3,6 +3,7 @@ package com.dune.greensupermarketbackend.category.sub_category.category_two.serv
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -55,8 +56,13 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
         validateString(categoryTwoDto.getSubCatTwoName(), "Category name cannot be empty!");
         validateString(categoryTwoDto.getSubCatTwoDescription(), "Category description cannot be empty!");
 
+        if (categoryTwoRepository.existsById(categoryTwoDto.getSubCatTwoId())) {
+            throw new APIException(HttpStatus.BAD_REQUEST,
+                    "Sub category two already exists with id " + categoryTwoDto.getSubCatTwoId() + "!");
+        }
+
         categoryOneRepository.findById(categoryTwoDto.getSubCatOneId())
-                .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Main category not found!"));
+                .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Category one id not found!"));
 
         CategoryTwoEntity categoryTwoEntity = modelMapper.map(categoryTwoDto, CategoryTwoEntity.class);
         categoryTwoRepository.save(categoryTwoEntity);
@@ -68,9 +74,14 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
         validateString(updateCategory.getSubCatTwoName(), "Category name cannot be empty!");
         validateString(updateCategory.getSubCatTwoDescription(), "Category description cannot be empty!");
 
+        CategoryOneEntity categoryOneEntity = categoryOneRepository.findById(updateCategory.getSubCatOneId())
+                .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Category one id not found!"));
+
         CategoryTwoEntity category = checkCategoryTwo(subCatTwoId);
         category.setSubCatTwoName(updateCategory.getSubCatTwoName());
+        category.setCategoryOne(categoryOneEntity);
         category.setSubCatTwoDescription(updateCategory.getSubCatTwoDescription());
+
         categoryTwoRepository.save(category);
         return new CategoryTwoResponseMessageDto(updateCategory.getSubCatTwoName() + " update successful!");
     }

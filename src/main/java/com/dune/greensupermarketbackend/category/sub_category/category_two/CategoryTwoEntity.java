@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "sub_category_two")
 public class CategoryTwoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sub_two_id")
     private Integer subCatTwoId;
 
