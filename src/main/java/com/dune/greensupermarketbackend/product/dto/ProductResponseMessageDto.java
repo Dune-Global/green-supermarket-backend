@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponseMessage {
+public class ProductResponseMessageDto {
     private String message;
 }

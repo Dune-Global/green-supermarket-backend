@@ -49,7 +49,7 @@ public class ProductEntity {
     private MainCategoryEntity mainCategory;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "l1_cat_id", nullable = true)
+    @JoinColumn(name = "l1_cat_id", nullable = false)
     private CategoryOneEntity l1Category;
 
     @ManyToOne(fetch = FetchType.EAGER)
