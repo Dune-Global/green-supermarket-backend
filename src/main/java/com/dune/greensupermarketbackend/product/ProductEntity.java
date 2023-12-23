@@ -1,6 +1,9 @@
 package com.dune.greensupermarketbackend.product;
 
 import com.dune.greensupermarketbackend.brand.BrandEntity;
+import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
+import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,25 +19,40 @@ import lombok.NoArgsConstructor;
 @Table(name = "product")
 public class ProductEntity {
     @Id
-    @Column(name = "product-id", nullable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer productId;
 
-    @Column(name = "product-name", nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
-    @Column(name = "product-description", nullable = false)
+    @Column(name = "product_description", nullable = false)
     private String productDescription;
 
-    @Column(name = "original-price", nullable = false)
+    @Column(name = "product_image", nullable = false)
+    private String productImage;
+
+    @Column(name = "original_price", nullable = false)
     private Double originalPrice;
 
-    @Column(name = "stock-keeping-units", nullable = false)
+    @Column(name = "stock_keeping_units", nullable = false)
     private Integer stockKeepingUnits;
 
-    @Column(name = "stock-available-units", nullable = false)
+    @Column(name = "stock_available_units", nullable = false)
     private Integer stockAvailableUnits;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand-id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id", nullable = false)
     private BrandEntity brand;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "main_cat_id", nullable = false)
+    private MainCategoryEntity mainCategory;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "l1_cat_id", nullable = true)
+    private CategoryOneEntity l1Category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "l2_cat_id", nullable = true)
+    private CategoryTwoEntity l2Category;
 }

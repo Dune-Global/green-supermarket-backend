@@ -1,6 +1,7 @@
 package com.dune.greensupermarketbackend.product;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
+import com.dune.greensupermarketbackend.product.dto.ProductDto;
 import com.dune.greensupermarketbackend.product.service.ProductService;
 
 import lombok.AllArgsConstructor;

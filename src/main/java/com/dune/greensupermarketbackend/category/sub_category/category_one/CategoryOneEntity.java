@@ -1,7 +1,6 @@
 package com.dune.greensupermarketbackend.category.sub_category.category_one;
 
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
-
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,4 +33,14 @@ public class CategoryOneEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "main_category_id", nullable = false)
     private MainCategoryEntity mainCategory;
+
+    @Override
+    public String toString() {
+        return "CategoryOneEntity{" +
+                "subCatOneId=" + subCatOneId +
+                ", subCatOneName='" + subCatOneName + '\'' +
+                ", subCatOneDescription='" + subCatOneDescription + '\'' +
+                ", mainCategory=" + mainCategory +
+                '}';
+    }
 }

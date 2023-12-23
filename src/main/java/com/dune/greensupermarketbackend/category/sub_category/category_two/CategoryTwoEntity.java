@@ -28,4 +28,13 @@ public class CategoryTwoEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sub_one_id", nullable = false)
     private CategoryOneEntity categoryOne;
+
+    @Override
+    public String toString() {
+        return "CategoryTwoEntity{" +
+                "subCatTwoId=" + subCatTwoId +
+                ", subCatTwoName='" + subCatTwoName + '\'' +
+                ", subCatTwoDescription='" + subCatTwoDescription + '\'' +
+                '}';
+    }
 }

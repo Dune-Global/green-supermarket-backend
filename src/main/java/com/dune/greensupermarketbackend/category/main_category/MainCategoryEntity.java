@@ -30,4 +30,14 @@ public class MainCategoryEntity {
 
     @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryOneEntity> categoryOnes;
+
+    @Override
+    public String toString() {
+        return "MainCategoryEntity{" +
+                "mainCategoryId=" + mainCategoryId +
+                ", mainCategoryName='" + mainCategoryName + '\'' +
+                ", mainCategoryDesc='" + mainCategoryDesc + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                '}';
+    }
 }
