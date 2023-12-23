@@ -3,8 +3,6 @@ package com.dune.greensupermarketbackend.category.main_category.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneRepository;
-import com.dune.greensupermarketbackend.category.sub_category.category_two.service.CategoryTwoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
