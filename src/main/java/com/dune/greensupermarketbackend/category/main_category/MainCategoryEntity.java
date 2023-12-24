@@ -24,6 +24,9 @@ public class MainCategoryEntity {
     @Column(name = "main_category_name", nullable = false)
     private String mainCategoryName;
 
+    @Column(name = "slug", nullable = false)
+    private String slug;
+
     @Column(name = "main_category_description", nullable = false)
     private String mainCategoryDesc;
 

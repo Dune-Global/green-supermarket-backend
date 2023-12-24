@@ -12,6 +12,7 @@ import lombok.Setter;
 public class MainCategoryDto {
     private Integer mainCategoryId;
     private String mainCategoryName;
+    private String slug;
     private String mainCategoryDesc;
     private String imgUrl;
 }
