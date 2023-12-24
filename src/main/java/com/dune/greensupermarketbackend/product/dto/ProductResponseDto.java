@@ -5,6 +5,7 @@ import com.dune.greensupermarketbackend.category.main_category.dto.MainCategoryD
 import com.dune.greensupermarketbackend.category.sub_category.category_one.dto.CategoryOneDto;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.dto.CategoryTwoDto;
 
+import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,5 @@ public class ProductResponseDto {
     private String mainCategoryName;
     private String l1CategoryName;
     private String l2CategoryName;
+    private DiscountDto discount;
 }

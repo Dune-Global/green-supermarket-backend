@@ -1,6 +1,7 @@
 package com.dune.greensupermarketbackend.category.main_category;
 
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
+import com.dune.greensupermarketbackend.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,9 @@ public class MainCategoryEntity {
 
     @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryOneEntity> categoryOnes;
+
+    @OneToMany(mappedBy = "mainCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductEntity> products;
 
     @Override
     public String toString() {

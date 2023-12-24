@@ -67,9 +67,10 @@ public class CategoryTwoController {
         return new ResponseEntity<>(categoryTwoResponseMessageDto, HttpStatus.OK);
     }
 
-    @GetMapping("subone-category/{subCatTwoId}")
-    public ResponseEntity<List<CategoryTwoDto>> getByMainCategory(@PathVariable("subCatTwoId") Integer subCatTwoId){
-        List<CategoryTwoDto> categoryTwoDtos = categoryTwoService.getAllBySubCatOne(subCatTwoId);
+    //Get By Sub category one id
+    @GetMapping("subone-category/{subCatOneId}")
+    public ResponseEntity<List<CategoryTwoDto>> getBySubCategoryOneId(@PathVariable("subCatOneId") Integer subCatOneId){
+        List<CategoryTwoDto> categoryTwoDtos = categoryTwoService.getAllBySubCatOne(subCatOneId);
         return ResponseEntity.ok(categoryTwoDtos);
     }
 }

@@ -2,6 +2,7 @@ package com.dune.greensupermarketbackend.product.service;
 
 import java.util.List;
 
+import com.dune.greensupermarketbackend.product.ProductEntity;
 import com.dune.greensupermarketbackend.product.dto.ProductDto;
 import com.dune.greensupermarketbackend.product.dto.ProductResponseDto;
 import com.dune.greensupermarketbackend.product.dto.ProductResponseMessageDto;
@@ -17,4 +18,7 @@ public interface ProductService {
     List<ProductResponseDto> getAllProductDetails();
 
     ProductResponseDto getProductDetails(Integer id);
+    List<ProductResponseDto> getProductsByMainCatId(Integer mainCatId);
+    List<ProductResponseDto> getProductsByCatOneId(Integer catOneId);
+    List<ProductResponseDto> getProductsByCatTwoId(Integer catTwoId);
 }

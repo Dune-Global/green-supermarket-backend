@@ -33,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
 
     private AdminEntity checkForAdmin(String empId){
         return adminRepository.findByEmpId(empId)
-                .orElseThrow(()->new ResourceNotFoundException("User not found with Employee ID "+empId)
+                .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"User not found with Employee ID "+empId)
                 );
     }
 
@@ -55,7 +55,6 @@ public class AdminServiceImpl implements AdminService {
     public AdminDto updateAdmin(String empId, AdminDto adminDto) {
         AdminEntity admin = checkForAdmin(empId);
 
-        admin.setEmpId(adminDto.getEmpId());
         admin.setFirstname(adminDto.getFirstname());
         admin.setLastname(adminDto.getLastname());
         admin.setEmail(adminDto.getEmail());

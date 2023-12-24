@@ -3,10 +3,18 @@ package com.dune.greensupermarketbackend.category.main_category;
 import com.dune.greensupermarketbackend.ApiVersionConfig;
 import com.dune.greensupermarketbackend.category.main_category.dto.MainCategoryDto;
 import com.dune.greensupermarketbackend.category.main_category.dto.MainCategoryResponseMessageDto;
+import com.dune.greensupermarketbackend.category.main_category.dto.MainCategoryWithSubsDto;
 import com.dune.greensupermarketbackend.category.main_category.service.MainCategoryService;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.dune.greensupermarketbackend.category.sub_category.category_one.dto.CategoryOneDto;
+import com.dune.greensupermarketbackend.category.sub_category.category_one.dto.CategoryOneWithSubsDto;
+import com.dune.greensupermarketbackend.category.sub_category.category_one.service.CategoryOneService;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.dto.CategoryTwoDto;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.service.CategoryTwoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +28,10 @@ import lombok.AllArgsConstructor;
 public class MainCategoryController {
 
     private MainCategoryService mainCategoryService;
+    private final CategoryOneService categoryOneService;
+    private final CategoryTwoService categoryTwoService;
+    private ModelMapper modelMapper;
+
 
     // Get the list of main categories
     @GetMapping("all-categories")
@@ -60,4 +72,28 @@ public class MainCategoryController {
         MainCategoryResponseMessageDto mainCategoryResponseMessageDto = mainCategoryService.deleteCategory(mainCategoryId);
         return new ResponseEntity<>(mainCategoryResponseMessageDto , HttpStatus.OK);
     }
+
+    @GetMapping("/main-categories")
+    public List<MainCategoryWithSubsDto> getAllMainCategories() {
+    List<MainCategoryDto> mainCategories = mainCategoryService.getAllCategories();
+    List<MainCategoryWithSubsDto> mainCategoriesWithSubs = new ArrayList<>();
+    for (MainCategoryDto mainCategory : mainCategories) {
+        List<CategoryOneDto> categoryOnes = categoryOneService.getAllByMainCategory(mainCategory.getMainCategoryId());
+        List<CategoryOneWithSubsDto> categoryOneWithSubs = categoryOnes.stream().map(categoryOneDto -> modelMapper.map(categoryOneDto,CategoryOneWithSubsDto.class)).toList();
+        for (CategoryOneWithSubsDto categoryOne : categoryOneWithSubs) {
+            List<CategoryTwoDto> categoryTwos = categoryTwoService.getAllBySubCatOne(categoryOne.getSubCatOneId());
+            categoryOne.setCategoryTwos(categoryTwos);
+        }
+        MainCategoryWithSubsDto mainCategoryWithSubs = new MainCategoryWithSubsDto(
+                mainCategory.getMainCategoryId(),
+                mainCategory.getMainCategoryName(),
+                mainCategory.getMainCategoryDesc(),
+                mainCategory.getImgUrl(),
+                categoryOneWithSubs);
+        mainCategoriesWithSubs.add(mainCategoryWithSubs);
+    }
+    return mainCategoriesWithSubs;
+}
+
+
 }

@@ -5,11 +5,14 @@ import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntit
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 
+import com.dune.greensupermarketbackend.discount.DiscountEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -34,6 +37,9 @@ public class ProductEntity {
     @Column(name = "original_price", nullable = false)
     private Double originalPrice;
 
+    @Column(name = "measuring_unit",nullable = false)
+    private String measuringUnit;
+
     @Column(name = "stock_keeping_units", nullable = false)
     private Integer stockKeepingUnits;
 
@@ -53,6 +59,9 @@ public class ProductEntity {
     private CategoryOneEntity l1Category;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "l2_cat_id", nullable = true)
+    @JoinColumn(name = "l2_cat_id")
     private CategoryTwoEntity l2Category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiscountEntity> discounts;
 }

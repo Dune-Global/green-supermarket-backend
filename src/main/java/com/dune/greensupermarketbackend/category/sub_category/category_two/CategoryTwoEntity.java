@@ -22,7 +22,7 @@ public class CategoryTwoEntity {
     @Column(name = "sub_one_name", nullable = false)
     private String subCatTwoName;
 
-    @Column(name = "sub_two_desc", nullable = false)
+    @Column(name = "sub_two_desc")
     private String subCatTwoDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
