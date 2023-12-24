@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
+import com.dune.greensupermarketbackend.product.ProductEntity;
+import com.dune.greensupermarketbackend.product.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
     private CategoryTwoRepository categoryTwoRepository;
     private CategoryOneRepository categoryOneRepository;
     private ModelMapper modelMapper;
+    private ProductRepository productRepository;
 
     private CategoryTwoEntity checkCategoryTwo(Integer subCatTwoId) {
         return categoryTwoRepository.findById(subCatTwoId)
@@ -54,7 +57,6 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
     @Override
     public CategoryTwoResponseMessageDto addCategory(CategoryTwoDto categoryTwoDto) {
         validateString(categoryTwoDto.getSubCatTwoName(), "Category name cannot be empty!");
-        validateString(categoryTwoDto.getSubCatTwoDescription(), "Category description cannot be empty!");
 
         if (categoryTwoRepository.existsById(categoryTwoDto.getSubCatTwoId())) {
             throw new APIException(HttpStatus.BAD_REQUEST,
@@ -72,7 +74,6 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
     @Override
     public CategoryTwoResponseMessageDto updateCategory(Integer subCatTwoId, CategoryTwoDto updateCategory) {
         validateString(updateCategory.getSubCatTwoName(), "Category name cannot be empty!");
-        validateString(updateCategory.getSubCatTwoDescription(), "Category description cannot be empty!");
 
         CategoryOneEntity categoryOneEntity = categoryOneRepository.findById(updateCategory.getSubCatOneId())
                 .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Category one id not found!"));
@@ -89,9 +90,18 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
     @Transactional
     @Override
     public CategoryTwoResponseMessageDto deleteCategory(Integer subCatTwoId) {
-        CategoryTwoEntity category = checkCategoryTwo(subCatTwoId);
-        categoryTwoRepository.delete(category);
-        return new CategoryTwoResponseMessageDto(category.getSubCatTwoName() + " deleted successfully!");
+        CategoryTwoEntity categoryTwo = checkCategoryTwo(subCatTwoId);
+        List<ProductEntity> products = productRepository.findByL2CategorySubCatTwoId(subCatTwoId);
+
+        for (ProductEntity product : products) {
+            product.setL2Category(null);
+        }
+
+        productRepository.saveAll(products);
+
+        categoryTwoRepository.delete(categoryTwo);
+
+        return new CategoryTwoResponseMessageDto(categoryTwo.getSubCatTwoName() + " deleted successfully!");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.dune.greensupermarketbackend.discount;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 import com.dune.greensupermarketbackend.product.ProductEntity;
 
@@ -18,23 +18,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "discount")
 public class DiscountEntity {
     @Id
-    @Column(name = "discount_id", nullable = false)
-    private Integer discountId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Column(name = "discount_name", nullable = false)
-    private String discountName;
+    @Column(name = "discount_description")
+    private String description;
 
-    @Column(name = "discount_description", nullable = false)
-    private String discountDescription;
+    @Column(name = "discount_start_date", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime startDate;
 
-    @Column(name = "discount_start_date", nullable = false)
-    private Time discountStartDate;
+    @Column(name = "discount_end_date", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime endDate;
 
-    @Column(name = "discount_end_date", nullable = false)
-    private Time discountEndDate;
-
-    @Column(name = "discount_percentage", nullable = false)
-    private Double discountPercentage;
+    @Column(name = "discount_rate", nullable = false)
+    private Double rate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)

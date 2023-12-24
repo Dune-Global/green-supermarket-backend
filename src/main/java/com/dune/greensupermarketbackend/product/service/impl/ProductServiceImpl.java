@@ -8,6 +8,8 @@ import com.dune.greensupermarketbackend.category.sub_category.category_one.Categ
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneRepository;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoRepository;
+import com.dune.greensupermarketbackend.discount.DiscountRepository;
+import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
 import com.dune.greensupermarketbackend.exception.APIException;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
     private MainCategoryRepository mainCategoryRepository;
     private CategoryOneRepository categoryOneRepository;
     private CategoryTwoRepository categoryTwoRepository;
+    private DiscountRepository discountRepository;
     private ModelMapper modelMapper;
 
     @Override
@@ -148,5 +151,53 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return productResponseDto;
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductsByMainCatId(Integer mainCatId) {
+        mainCategoryRepository.findById(mainCatId)
+                .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Main category not found with id: "+mainCatId));
+        List<ProductEntity> products = productRepository.findByMainCategoryMainCategoryId(mainCatId);
+        return products.stream()
+            .map(product -> {
+                ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+                productResponseDto.setDiscount(
+                        modelMapper.map(discountRepository.findCurrentDiscountForProduct(product.getProductId()), DiscountDto.class)
+            );
+            return productResponseDto;
+        })
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductsByCatOneId(Integer catOneId) {
+        categoryOneRepository.findById(catOneId)
+                .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Category one not found with id: "+catOneId));
+        List<ProductEntity> products = productRepository.findByL1CategorySubCatOneId(catOneId);
+        return products.stream()
+                .map(product -> {
+                    ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+                    productResponseDto.setDiscount(
+                            modelMapper.map(discountRepository.findCurrentDiscountForProduct(product.getProductId()), DiscountDto.class)
+                    );
+                    return productResponseDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponseDto> getProductsByCatTwoId(Integer catTwoId) {
+        categoryTwoRepository.findById(catTwoId)
+                .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Category two not found with id: "+catTwoId));
+        List<ProductEntity> products = productRepository.findByL2CategorySubCatTwoId(catTwoId);
+        return products.stream()
+                .map(product -> {
+                    ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+                    productResponseDto.setDiscount(
+                            modelMapper.map(discountRepository.findCurrentDiscountForProduct(product.getProductId()), DiscountDto.class)
+                    );
+                    return productResponseDto;
+                })
+                .collect(Collectors.toList());
     }
 }

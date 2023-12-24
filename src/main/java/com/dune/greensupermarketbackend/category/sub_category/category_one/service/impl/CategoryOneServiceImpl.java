@@ -55,7 +55,6 @@ public class CategoryOneServiceImpl implements CategoryOneService {
     @Override
     public CategoryOneResponseMessageDto addCategory(CategoryOneDto categoryOneDto) {
         validateString(categoryOneDto.getSubCatOneName(), "Category name cannot be empty!");
-        validateString(categoryOneDto.getSubCatOneDescription(), "Category description cannot be empty!");
 
         if (categoryOneRepository.existsById(categoryOneDto.getSubCatOneId())) {
             throw new APIException(HttpStatus.BAD_REQUEST,
@@ -73,7 +72,6 @@ public class CategoryOneServiceImpl implements CategoryOneService {
     @Override
     public CategoryOneResponseMessageDto updateCategory(Integer subCatOneId, CategoryOneDto updateCategory) {
         validateString(updateCategory.getSubCatOneName(), "Category name cannot be empty!");
-        validateString(updateCategory.getSubCatOneDescription(), "Category description cannot be empty!");
 
         CategoryOneEntity category = checkCategoryOne(subCatOneId);
 
