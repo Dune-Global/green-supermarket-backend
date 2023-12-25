@@ -17,5 +17,4 @@ public class CategoryOneDto {
     private String subCatOneName;
     private String subCatOneDescription;
     private Integer mainCategoryId;
-    private List<CategoryTwoDto> categoryTwos;
 }

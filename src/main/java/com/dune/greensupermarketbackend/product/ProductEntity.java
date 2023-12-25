@@ -54,7 +54,7 @@ public class ProductEntity {
     @JoinColumn(name = "main_cat_id", nullable = false)
     private MainCategoryEntity mainCategory;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "l1_cat_id", nullable = false)
     private CategoryOneEntity l1Category;
 

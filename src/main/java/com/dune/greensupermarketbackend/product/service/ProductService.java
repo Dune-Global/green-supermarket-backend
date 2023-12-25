@@ -21,4 +21,6 @@ public interface ProductService {
     List<ProductResponseDto> getProductsByMainCatId(Integer mainCatId);
     List<ProductResponseDto> getProductsByCatOneId(Integer catOneId);
     List<ProductResponseDto> getProductsByCatTwoId(Integer catTwoId);
+    List<ProductDto> getProductsByBrand(Integer brandId);
+    List<ProductDto> getProductsWithoutSubs();
 }

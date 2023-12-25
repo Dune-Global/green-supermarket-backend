@@ -1,6 +1,5 @@
 package com.dune.greensupermarketbackend.admin;
 
-import com.dune.greensupermarketbackend.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +41,7 @@ public class AdminEntity implements UserDetails {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

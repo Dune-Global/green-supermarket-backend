@@ -28,8 +28,11 @@ public class CategoryOneEntity {
     @Column(name = "sub_one_des")
     private String subCatOneDescription;
 
-    @OneToMany(mappedBy = "l1Category")
+    @OneToMany(mappedBy = "l1Category", cascade = CascadeType.REMOVE)
     private List<ProductEntity> products;
+
+    @OneToMany(mappedBy = "categoryOne", cascade = CascadeType.REMOVE)
+    private List<CategoryTwoEntity> categoryTwos;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "main_category_id", nullable = false)
