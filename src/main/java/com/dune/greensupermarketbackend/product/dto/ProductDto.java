@@ -1,5 +1,6 @@
 package com.dune.greensupermarketbackend.product.dto;
 
+import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class ProductDto {
     private String productName;
     private String productDescription;
     private String productImage;
+    private String measuringUnit;
     private Double originalPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;
@@ -21,4 +23,5 @@ public class ProductDto {
     private Integer mainCategoryId;
     private Integer l1CategoryId;
     private Integer l2CategoryId;
+    private DiscountDto discount;
 }

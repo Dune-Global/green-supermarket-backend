@@ -2,11 +2,14 @@ package com.dune.greensupermarketbackend.category.sub_category.category_two;
 
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
 
+import com.dune.greensupermarketbackend.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -28,6 +31,9 @@ public class CategoryTwoEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sub_one_id", nullable = false)
     private CategoryOneEntity categoryOne;
+
+    @OneToMany(mappedBy = "l2Category")
+    private List<ProductEntity> products1;
 
     @Override
     public String toString() {

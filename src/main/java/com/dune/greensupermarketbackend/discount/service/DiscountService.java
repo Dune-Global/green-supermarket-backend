@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface DiscountService {
     DiscountDto createDiscount(DiscountDto discountDto);
-    List<DiscountEntity> getAllDiscounts();
+    List<DiscountDto> getAllDiscounts();
     DiscountDto getDiscountByDiscountId(Integer discountId);
     DiscountDto updateDiscount(Integer discountId,DiscountDto updatedDiscount);
     void deleteDiscount(Integer discountId);
-    List<DiscountEntity> getDiscountsByProductId(Integer productId);
+    List<DiscountDto> getDiscountsByProductId(Integer productId);
     DiscountDto getCurrentDiscountForProduct(Integer productId);
-    List<DiscountEntity> getCurrentDiscounts();
+    List<DiscountDto> getCurrentDiscounts();
 }

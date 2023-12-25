@@ -7,7 +7,7 @@ import com.dune.greensupermarketbackend.admin.dto.AdminRegisterDto;
 import com.dune.greensupermarketbackend.config.JwtService;
 import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
-import com.dune.greensupermarketbackend.role.Role;
+import com.dune.greensupermarketbackend.admin.RoleEnum;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,7 +58,7 @@ public class AuthService {
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.valueOf(request.getRole()))
+                .role(RoleEnum.valueOf(request.getRole()))
                 .build();
         adminRepository.save(admin);
 //        var jwtToken = jwtService.generateToken(admin);
@@ -108,7 +108,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
-                .role(Role.CUSTOMER)
+                .role(RoleEnum.CUSTOMER)
                 .build();
         customerRepository.save(customer);
 

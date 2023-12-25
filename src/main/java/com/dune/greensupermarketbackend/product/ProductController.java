@@ -53,4 +53,34 @@ public class ProductController {
         return new ResponseEntity<>(productResponseMessageDto, HttpStatus.OK);
     }
 
+    @GetMapping("main-category/{mainCatId}")
+    public ResponseEntity<List<ProductResponseDto>> getProductsByMainCatId(@PathVariable Integer mainCatId) {
+        List<ProductResponseDto> productDetails = productService.getProductsByMainCatId(mainCatId);
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("category-one/{catOneId}")
+    public ResponseEntity<List<ProductResponseDto>> getProductsByCatOneId(@PathVariable Integer catOneId) {
+        List<ProductResponseDto> productDetails = productService.getProductsByCatOneId(catOneId);
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("category-two/{catTwoId}")
+    public ResponseEntity<List<ProductResponseDto>> getProductsByCatTwoId(@PathVariable Integer catTwoId) {
+        List<ProductResponseDto> productDetails = productService.getProductsByCatTwoId(catTwoId);
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("brand/{brandId}")
+    public ResponseEntity<List<ProductDto>> getProductsByBrand(@PathVariable Integer brandId) {
+        List<ProductDto> productDetails = productService.getProductsByBrand(brandId);
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("all-products-without-subs")
+    public ResponseEntity<List<ProductDto>> getProductsWithoutSubs() {
+        List<ProductDto> productDetails = productService.getProductsWithoutSubs();
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
+    }
+
 }

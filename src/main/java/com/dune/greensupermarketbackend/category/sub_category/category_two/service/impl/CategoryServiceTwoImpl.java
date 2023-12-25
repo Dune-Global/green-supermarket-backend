@@ -90,18 +90,18 @@ public class CategoryServiceTwoImpl implements CategoryTwoService {
     @Transactional
     @Override
     public CategoryTwoResponseMessageDto deleteCategory(Integer subCatTwoId) {
-        CategoryTwoEntity categoryTwo = checkCategoryTwo(subCatTwoId);
-        List<ProductEntity> products = productRepository.findByL2CategorySubCatTwoId(subCatTwoId);
+    CategoryTwoEntity categoryTwo = checkCategoryTwo(subCatTwoId);
+    List<ProductEntity> products = productRepository.findByL2CategorySubCatTwoId(subCatTwoId);
 
-        for (ProductEntity product : products) {
-            product.setL2Category(null);
-        }
+    for (ProductEntity product : products) {
+        product.setL2Category(null);
+    }
 
-        productRepository.saveAll(products);
+    productRepository.saveAll(products);
 
-        categoryTwoRepository.delete(categoryTwo);
+    categoryTwoRepository.delete(categoryTwo);
 
-        return new CategoryTwoResponseMessageDto(categoryTwo.getSubCatTwoName() + " deleted successfully!");
+    return new CategoryTwoResponseMessageDto(categoryTwo.getSubCatTwoName() + " deleted successfully!");
     }
 
     @Override
