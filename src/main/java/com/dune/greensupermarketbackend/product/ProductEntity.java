@@ -19,9 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product", indexes = {
-        @Index(name = "index_brand_id", columnList = "brand_id", unique = true)
-})
+@Table(name = "product")
 public class ProductEntity {
     @Id
     @Column(name = "product_id", nullable = false)
