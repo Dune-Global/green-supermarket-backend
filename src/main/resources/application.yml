@@ -26,7 +26,7 @@ spring:
 
   azure:
     base:
-        uri: https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/
+        uri: ${AZURE_BASE_URI}
     storage:
       container:
         name: greensupermarketblogcontainer
