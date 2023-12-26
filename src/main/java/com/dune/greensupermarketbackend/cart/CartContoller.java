@@ -23,5 +23,4 @@ public class CartContoller {
         CartDto cartDto = cartService.createCart();
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
-
 }
