@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
+import com.dune.greensupermarketbackend.azure_storage.dto.AzureDto;
 import com.dune.greensupermarketbackend.azure_storage.service.AzureBlobService;
 
 @CrossOrigin("*")
@@ -32,11 +33,13 @@ public class AzureController {
     private AzureBlobService azureBlobAdapter;
 
     @PostMapping("upload")
-    public ResponseEntity<String> upload(@RequestParam MultipartFile file)
+    public ResponseEntity<AzureDto> upload(@RequestParam MultipartFile file)
             throws IOException {
 
-        String fileName = azureBlobAdapter.upload(file);
-        return ResponseEntity.ok(fileName);
+        String imageUrl = azureBlobAdapter.upload(file); 
+
+        AzureDto azureDto = new AzureDto(imageUrl); 
+        return ResponseEntity.ok(azureDto);
     }
 
     @GetMapping("all-files")
