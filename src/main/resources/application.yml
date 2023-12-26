@@ -5,7 +5,7 @@ spring:
     password: Lithara@2002
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 5 
+      maximum-pool-size: 5
   jpa:
     hibernate:
       ddl-auto: update
@@ -26,3 +26,15 @@ spring:
         name: greensupermarketblogcontainer
       connection:
         string: DefaultEndpointsProtocol=https;AccountName=greensupermarketstoreacc;AccountKey=fGIpZLaa/xXYrR/98HuVDVRWfUmEPHhRWlnYesob00ejEAh04jk6wm9HZVpb9s3u6hq3wC/hLitE+AStuQifMA==;EndpointSuffix=core.windows.net
+
+  mail:
+    host: smtp.gmail.com
+    username: info.duneglobal@gmail.com
+    password: zxtyyjxccxtpqtio
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
