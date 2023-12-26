@@ -17,7 +17,7 @@ public class ProductDto {
     private String productImage;
     private String measuringUnit;
     private Double originalPrice;
-    private Double discountedPrice;
+    private Double currentPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;
     private Integer brandId;

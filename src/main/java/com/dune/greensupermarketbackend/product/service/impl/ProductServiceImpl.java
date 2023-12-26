@@ -189,7 +189,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
-                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
                     productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
@@ -214,7 +214,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
             productResponseDto.setDiscount(discountDto);
 
         }
-        productResponseDto.setDiscountedPrice(getDiscountedPrice(productEntity));
+        productResponseDto.setCurrentPrice(getDiscountedPrice(productEntity));
         productResponseDto.setRate(getRate(productEntity));
 
         return productResponseDto;
@@ -233,7 +233,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                 DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                 productResponseDto.setDiscount(discountDto);
             }
-            productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+            productResponseDto.setCurrentPrice(getDiscountedPrice(product));
             productResponseDto.setRate(getRate(product));
             return productResponseDto;
         })
@@ -253,7 +253,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
-                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
                     productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
@@ -273,7 +273,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
-                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
                     productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
@@ -293,7 +293,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
-                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
                     productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
@@ -311,7 +311,7 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
-                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
                     productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })

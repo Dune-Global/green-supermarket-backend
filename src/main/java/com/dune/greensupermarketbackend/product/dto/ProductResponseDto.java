@@ -26,7 +26,7 @@ public class ProductResponseDto {
     @JsonSerialize(using = CustomDoubleSerializer.class)
     private Double originalPrice;
     @JsonSerialize(using = CustomDoubleSerializer.class)
-    private Double discountedPrice;
+    private Double currentPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;
     private BrandDto brand;
