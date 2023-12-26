@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl) {
+    public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl) {
 
     if (productDto.getProductId() == null || productDto.getProductName().isEmpty()
             || productDto.getOriginalPrice() == null || productDto.getStockKeepingUnits() == null
