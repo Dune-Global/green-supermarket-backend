@@ -41,6 +41,9 @@ public class CustomerEntity implements UserDetails {
     @Column(name="phone-number")
     private String phoneNumber;
 
+    @Column(name="image-url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressEntity> addresses;
 

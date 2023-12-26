@@ -58,6 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLastname(customerDto.getLastname());
         customer.setEmail(customerDto.getEmail());
         customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setImageUrl(customerDto.getImageUrl());
 
         CustomerEntity updatedCustomer = customerRepository.save(customer);
         return modelMapper.map(updatedCustomer,CustomerDto.class);
