@@ -2,6 +2,7 @@ package com.dune.greensupermarketbackend.customer;
 
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
+import com.dune.greensupermarketbackend.testimonial.TestimonialEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,9 @@ public class CustomerEntity implements UserDetails {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressEntity> addresses;
+
+    @OneToMany(mappedBy = "reviwer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TestimonialEntity> testimonials;
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
