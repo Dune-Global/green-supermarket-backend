@@ -25,6 +25,8 @@ spring:
       max-request-size: -1
 
   azure:
+    base:
+        uri: https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/
     storage:
       container:
         name: greensupermarketblogcontainer

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import com.azure.core.http.rest.PagedIterable;
@@ -27,6 +28,10 @@ public class AzureBlobService {
     @Autowired
     BlobContainerClient blobContainerClient;
 
+    @Value("${spring.azure.base.uri}")
+    private String baseUrl;
+
+
     public String upload(MultipartFile multipartFile) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
         String extension = originalFilename != null ? originalFilename.substring(originalFilename.lastIndexOf("."))
@@ -41,7 +46,6 @@ public class AzureBlobService {
         blob.uploadWithResponse(new BlobParallelUploadOptions(multipartFile.getInputStream())
                 .setHeaders(headers), null);
 
-        String baseUrl = "https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/";
         return baseUrl + newFileName;
     }
 
