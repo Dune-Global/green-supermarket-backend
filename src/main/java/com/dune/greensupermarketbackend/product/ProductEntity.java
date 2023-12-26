@@ -19,7 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product")
+@Table(name = "product", indexes = {
+        @Index(name = "index_brand_id", columnList = "brand_id", unique = true)
+})
 public class ProductEntity {
     @Id
     @Column(name = "product_id", nullable = false)
@@ -54,12 +56,12 @@ public class ProductEntity {
     @JoinColumn(name = "main_cat_id", nullable = false)
     private MainCategoryEntity mainCategory;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "l1_cat_id", nullable = false)
     private CategoryOneEntity l1Category;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "l2_cat_id")
+    @JoinColumn(name = "l2_cat_id",nullable = true)
     private CategoryTwoEntity l2Category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

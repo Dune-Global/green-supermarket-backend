@@ -73,7 +73,6 @@ public class MainCategoryServiceImpl implements MainCategoryService {
         return new MainCategoryResponseMessageDto(updateCategory.getMainCategoryName() + " update successful!");
     }
 
-
     @Transactional
     @Override
     public MainCategoryResponseMessageDto deleteCategory(Integer mainCategoryId) {

@@ -1,7 +1,7 @@
 package com.dune.greensupermarketbackend.customer;
 
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
-import com.dune.greensupermarketbackend.role.Role;
+import com.dune.greensupermarketbackend.admin.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +44,7 @@ public class CustomerEntity implements UserDetails {
     private List<AddressEntity> addresses;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

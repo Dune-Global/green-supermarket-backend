@@ -5,7 +5,9 @@ import com.dune.greensupermarketbackend.category.main_category.dto.MainCategoryD
 import com.dune.greensupermarketbackend.category.sub_category.category_one.dto.CategoryOneDto;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.dto.CategoryTwoDto;
 
+import com.dune.greensupermarketbackend.config.CustomDoubleSerializer;
 import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,11 @@ public class ProductResponseDto {
     private String productName;
     private String productDescription;
     private String productImage;
+    private String measuringUnit;
+    @JsonSerialize(using = CustomDoubleSerializer.class)
     private Double originalPrice;
+    @JsonSerialize(using = CustomDoubleSerializer.class)
+    private Double currentPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;
     private BrandDto brand;
@@ -32,4 +38,5 @@ public class ProductResponseDto {
     private String l1CategoryName;
     private String l2CategoryName;
     private DiscountDto discount;
+    private Double rate;
 }

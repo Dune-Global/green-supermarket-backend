@@ -73,7 +73,7 @@ public class MainCategoryController {
         return new ResponseEntity<>(mainCategoryResponseMessageDto , HttpStatus.OK);
     }
 
-    @GetMapping("/main-categories")
+    @GetMapping("/main-categories-with-sub")
     public List<MainCategoryWithSubsDto> getAllMainCategories() {
     List<MainCategoryDto> mainCategories = mainCategoryService.getAllCategories();
     List<MainCategoryWithSubsDto> mainCategoriesWithSubs = new ArrayList<>();
@@ -93,7 +93,7 @@ public class MainCategoryController {
         mainCategoriesWithSubs.add(mainCategoryWithSubs);
     }
     return mainCategoriesWithSubs;
-}
+    }
 
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
+import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,14 @@ import com.dune.greensupermarketbackend.category.sub_category.category_one.servi
 import com.dune.greensupermarketbackend.exception.APIException;
 
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class CategoryOneServiceImpl implements CategoryOneService {
 
     private CategoryOneRepository categoryOneRepository;
+    private CategoryTwoRepository categoryTwoRepository;
     private MainCategoryRepository mainCategoryRepository;
     private ModelMapper modelMapper;
 
@@ -86,17 +89,20 @@ public class CategoryOneServiceImpl implements CategoryOneService {
         return new CategoryOneResponseMessageDto(updateCategory.getSubCatOneName() + " update successful!");
     }
 
+    @Transactional
     @Override
     public CategoryOneResponseMessageDto deleteCategory(Integer subCatOneId) {
+        List<CategoryTwoEntity> subCategories = categoryTwoRepository.findByCategoryOneSubCatOneId(subCatOneId);
+
+        // Delete all found CategoryTwoEntity objects
+        categoryTwoRepository.deleteAll(subCategories);
         CategoryOneEntity category = checkCategoryOne(subCatOneId);
         categoryOneRepository.delete(category);
-        return new CategoryOneResponseMessageDto(category.getSubCatOneName() + " deleted successfully!");
+        return new CategoryOneResponseMessageDto(category.getSubCatOneName() + " and all associated products deleted successfully!");
     }
 
     @Override
     public List<CategoryOneDto> getAllByMainCategory(Integer mainCatId) {
-//        Boolean isExists = categoryOneRepository.existsByMainCategory_Id(mainCatId);
-//        System.out.println(isExists);
 
         List<CategoryOneEntity> categoryOneEntities = categoryOneRepository.findByMainCategoryMainCategoryId(mainCatId);
 

@@ -6,8 +6,7 @@ import com.dune.greensupermarketbackend.admin.AdminRepository;
 import com.dune.greensupermarketbackend.admin.service.AdminService;
 import com.dune.greensupermarketbackend.auth.PasswordUpdateRequest;
 import com.dune.greensupermarketbackend.exception.APIException;
-import com.dune.greensupermarketbackend.exception.ResourceNotFoundException;
-import com.dune.greensupermarketbackend.role.Role;
+import com.dune.greensupermarketbackend.admin.RoleEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
         admin.setEmail(adminDto.getEmail());
         admin.setDesignation(adminDto.getDesignation());
         admin.setPhoneNumber(adminDto.getPhoneNumber());
-        admin.setRole(Role.valueOf(adminDto.getRole()));
+        admin.setRole(RoleEnum.valueOf(adminDto.getRole()));
 
         AdminEntity updatedAdmin = adminRepository.save(admin);
         return modelMapper.map(updatedAdmin,AdminDto.class);
