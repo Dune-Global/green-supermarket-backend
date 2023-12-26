@@ -14,4 +14,5 @@ public class CustomerDto {
     private String lastname;
     private String email;
     private String phoneNumber;
+    private String imageUrl;
 }
