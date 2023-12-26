@@ -31,7 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-# Ignore Spring Boot development and production configuration files
-application-dev.yml
-application-prod.yml
