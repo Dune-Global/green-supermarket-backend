@@ -25,6 +25,8 @@ public class ProductResponseDto {
     private String measuringUnit;
     @JsonSerialize(using = CustomDoubleSerializer.class)
     private Double originalPrice;
+    @JsonSerialize(using = CustomDoubleSerializer.class)
+    private Double discountedPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;
     private BrandDto brand;
@@ -36,4 +38,5 @@ public class ProductResponseDto {
     private String l1CategoryName;
     private String l2CategoryName;
     private DiscountDto discount;
+    private Double rate;
 }

@@ -60,6 +60,22 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    public Double getDiscountedPrice(ProductEntity productEntity) {
+        Double discountedPrice = null;
+        DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(productEntity.getProductId());
+        if (discountEntity != null) {
+            discountedPrice =  productEntity.getOriginalPrice() - (productEntity.getOriginalPrice() * discountEntity.getRate() / 100);
+        }else {
+            discountedPrice = productEntity.getOriginalPrice();
+        }
+        return discountedPrice;
+    }
+
+    public Double getRate(ProductEntity productEntity) {
+        Double rate = 5.0;
+        return rate;
+    }
+
 
     @Override
 public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl) {
@@ -173,6 +189,8 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
+                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -194,7 +212,10 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
         if (discountEntity != null) {
             DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
             productResponseDto.setDiscount(discountDto);
+
         }
+        productResponseDto.setDiscountedPrice(getDiscountedPrice(productEntity));
+        productResponseDto.setRate(getRate(productEntity));
 
         return productResponseDto;
     }
@@ -212,6 +233,8 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                 DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                 productResponseDto.setDiscount(discountDto);
             }
+            productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+            productResponseDto.setRate(getRate(product));
             return productResponseDto;
         })
         .collect(Collectors.toList());
@@ -230,6 +253,8 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
+                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -248,6 +273,8 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
+                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -259,7 +286,17 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                 .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Brand not found with id: "+brandId));
         List<ProductEntity> products = productRepository.findByBrandBrandId(brandId);
         return products.stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
+                .map(product -> {
+                    ProductDto productResponseDto = modelMapper.map(product, ProductDto.class);
+                    DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(product.getProductId());
+                    if (discountEntity != null) {
+                        DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
+                        productResponseDto.setDiscount(discountDto);
+                    }
+                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setRate(getRate(product));
+                    return productResponseDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -274,6 +311,8 @@ public ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl
                         DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
                         productResponseDto.setDiscount(discountDto);
                     }
+                    productResponseDto.setDiscountedPrice(getDiscountedPrice(product));
+                    productResponseDto.setRate(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
