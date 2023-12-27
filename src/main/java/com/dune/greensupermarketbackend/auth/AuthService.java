@@ -117,6 +117,7 @@ public class AuthService {
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .phoneNumber(request.getPhoneNumber())
                                 .role(RoleEnum.CUSTOMER)
+                                .imageUrl("https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/8ef1ae8e-2dd5-46b6-beda-7c9c32ac1aae.jpg")
                                 .build();
                 customerRepository.save(customer);
 
