@@ -13,4 +13,5 @@ public class CustomerAuthorizationResponse {
     private String email;
     private String role;
     private String cartId;
+    private String imageUrl;
 }
