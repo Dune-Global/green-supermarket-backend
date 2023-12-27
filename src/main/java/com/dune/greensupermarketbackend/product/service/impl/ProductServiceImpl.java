@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
     BrandEntity brand = brandRepository.findById(productDto.getBrandId())
             .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Brand ID not found!"));
 
-    checkCategories(productDto);
+    // checkCategories(productDto);
 
     MainCategoryEntity mainCategory = mainCategoryRepository.findById(productDto.getMainCategoryId())
             .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Main Category ID not found!"));
