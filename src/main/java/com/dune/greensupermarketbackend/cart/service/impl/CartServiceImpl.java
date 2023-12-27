@@ -1,13 +1,12 @@
 package com.dune.greensupermarketbackend.cart.service.impl;
 
-import com.dune.greensupermarketbackend.customer.CustomerDto;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.cart.CartRepository;
-import com.dune.greensupermarketbackend.cart.dto.CartDto;
+import com.dune.greensupermarketbackend.cart.CartDto;
 import com.dune.greensupermarketbackend.cart.service.CartService;
 
 @Service

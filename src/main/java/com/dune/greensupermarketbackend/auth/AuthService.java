@@ -5,7 +5,7 @@ import com.dune.greensupermarketbackend.admin.dto.AdminAuthenticationRequest;
 import com.dune.greensupermarketbackend.admin.dto.AdminAuthorizationResponse;
 import com.dune.greensupermarketbackend.admin.dto.AdminRegisterDto;
 import com.dune.greensupermarketbackend.cart.CartEntity;
-import com.dune.greensupermarketbackend.cart.dto.CartDto;
+import com.dune.greensupermarketbackend.cart.CartDto;
 import com.dune.greensupermarketbackend.cart.service.CartService;
 import com.dune.greensupermarketbackend.config.JwtService;
 import com.dune.greensupermarketbackend.customer.*;

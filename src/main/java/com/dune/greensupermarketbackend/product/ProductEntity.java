@@ -1,6 +1,7 @@
 package com.dune.greensupermarketbackend.product;
 
 import com.dune.greensupermarketbackend.brand.BrandEntity;
+import com.dune.greensupermarketbackend.cart.cart_item.CartItemEntity;
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
@@ -64,4 +65,7 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiscountEntity> discounts;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItemEntity> cartItems;
 }

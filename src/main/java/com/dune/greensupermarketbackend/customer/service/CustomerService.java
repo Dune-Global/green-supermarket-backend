@@ -11,4 +11,5 @@ public interface CustomerService {
     CustomerDto updateCustomer(Integer id, CustomerDto customerDto);
     void updatePassword(Integer customerId, PasswordUpdateRequest passwordUpdateRequest);
     void deleteCustomer(Integer id);
+    CustomerDto findByCartId(Integer cartId);
 }
