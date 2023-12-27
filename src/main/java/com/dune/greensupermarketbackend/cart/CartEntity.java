@@ -1,5 +1,6 @@
 package com.dune.greensupermarketbackend.cart;
 
+import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,4 +18,8 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id", nullable = false)
     private Integer cartId;
+
+    @OneToOne(mappedBy = "cart")
+    private CustomerEntity customer;
+
 }
