@@ -1,5 +1,8 @@
 package com.dune.greensupermarketbackend.cart.service.impl;
 
+import com.dune.greensupermarketbackend.customer.CustomerDto;
+import com.dune.greensupermarketbackend.customer.CustomerEntity;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.dune.greensupermarketbackend.cart.CartEntity;
@@ -10,22 +13,19 @@ import com.dune.greensupermarketbackend.cart.service.CartService;
 @Service
 public class CartServiceImpl implements CartService {
     private CartRepository cartRepository;
+    private ModelMapper modelMapper;
 
-    public CartServiceImpl(CartRepository cartRepository) {
+    public CartServiceImpl(CartRepository cartRepository, ModelMapper modelMapper) {
         this.cartRepository = cartRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public CartDto createCart() {
+    public CartDto createCart(CustomerEntity customer) {
         CartEntity newCart = new CartEntity();
-        CartEntity savedCart = cartRepository.save(newCart);
-        CartDto cartDto = mapEntityToDto(savedCart);
+        CustomerEntity customerEntity = modelMapper.map(customer, CustomerEntity.class);
+        newCart.setCustomer(customerEntity);
+        CartDto cartDto = modelMapper.map(cartRepository.save(newCart), CartDto.class);
         return cartDto;
-    }
-
-    private CartDto mapEntityToDto(CartEntity cartEntity) {
-        return CartDto.builder()
-                .cartId(cartEntity.getCartId())
-                .build();
     }
 }

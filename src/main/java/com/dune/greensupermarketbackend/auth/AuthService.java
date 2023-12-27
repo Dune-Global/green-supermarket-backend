@@ -4,12 +4,16 @@ import com.dune.greensupermarketbackend.admin.*;
 import com.dune.greensupermarketbackend.admin.dto.AdminAuthenticationRequest;
 import com.dune.greensupermarketbackend.admin.dto.AdminAuthorizationResponse;
 import com.dune.greensupermarketbackend.admin.dto.AdminRegisterDto;
+import com.dune.greensupermarketbackend.cart.CartEntity;
+import com.dune.greensupermarketbackend.cart.dto.CartDto;
+import com.dune.greensupermarketbackend.cart.service.CartService;
 import com.dune.greensupermarketbackend.config.JwtService;
 import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +32,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CartService cartService;
+    private final ModelMapper modelMapper;
 
     private Map<String,Object> customerExtraClaims(CustomerEntity customer) {
         Map<String, Object> customerExtraClaims = new HashMap<>();
@@ -111,6 +117,11 @@ public class AuthService {
                 .role(RoleEnum.CUSTOMER)
                 .build();
         customerRepository.save(customer);
+
+        CartDto cartDto = cartService.createCart(customer);
+        customer.setCart(modelMapper.map(cartDto, CartEntity.class));
+        customerRepository.save(customer);
+
 
         Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
         var jwtToken = jwtService.generateToken(customerExtraClaims, customer);

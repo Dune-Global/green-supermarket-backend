@@ -1,5 +1,6 @@
 package com.dune.greensupermarketbackend.customer;
 
+import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
 import com.dune.greensupermarketbackend.testimonial.TestimonialEntity;
@@ -49,6 +50,10 @@ public class CustomerEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
+    private CartEntity cart;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
