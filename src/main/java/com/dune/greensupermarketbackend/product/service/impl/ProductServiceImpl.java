@@ -128,6 +128,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseMessageDto updateProduct(Integer id, ProductDto productDto) {
+       System.out.println(id); 
     ProductEntity existingProduct = productRepository.findById(id)
             .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Product not found!"));
 
