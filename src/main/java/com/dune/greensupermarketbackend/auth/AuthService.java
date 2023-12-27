@@ -42,11 +42,12 @@ public class AuthService {
         customerExtraClaims.put("lastname", customer.getLastname());
         customerExtraClaims.put("email", customer.getEmail());
         customerExtraClaims.put("role", customer.getRole().toString());
+        customerExtraClaims.put("cartId", customer.getCart().getCartId());
 
         return customerExtraClaims;
     }
 
-    //Admin
+    //Admin sign up
     public AuthenticationResponse registerAdmin(AdminRegisterDto request){
         //Check EmpId exist
         if(adminRepository.existsByEmpId(request.getEmpId())){
@@ -74,6 +75,7 @@ public class AuthService {
                 .build();
     }
 
+    //Admin sign in
     public AuthenticationResponse authenticateAdmin(AdminAuthenticationRequest request){
         var admin = adminRepository.findByEmpId(request.getEmpId())
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST,"Invalid empId or password"));
@@ -102,7 +104,7 @@ public class AuthService {
                 .build();
     }
 
-    //Customer
+    //Customer sign up
     public AuthenticationResponse registerCustomer(CustomerRegisterDto request){
         if(customerRepository.existsByEmail(request.getEmail())){
             throw new APIException(HttpStatus.BAD_REQUEST,"Email Already exists");
@@ -131,6 +133,7 @@ public class AuthService {
                 .build();
     }
 
+    //Customer sign in
     public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request){
         var customer = customerRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST,"Invalid Email or password"));
@@ -153,6 +156,7 @@ public class AuthService {
                 .build();
     }
 
+    //Admin Decode JWT token
     public AdminAuthorizationResponse authorizeAdmin(String token) {
     Claims claims = jwtService.extractAllClaims(token);
 
@@ -166,6 +170,7 @@ public class AuthService {
     return response;
     }
 
+    //Customer Decode JWT token
     public CustomerAuthorizationResponse authorizeCustomer(String token) {
         Claims claims = jwtService.extractAllClaims(token);
 
@@ -175,6 +180,7 @@ public class AuthService {
         response.setLastname((String) claims.get("lastname"));
         response.setEmail((String) claims.get("email"));
         response.setRole((String) claims.get("role"));
+        response.setCartId(Integer.toString((Integer) claims.get("cartId")));
 
         return response;
     }
