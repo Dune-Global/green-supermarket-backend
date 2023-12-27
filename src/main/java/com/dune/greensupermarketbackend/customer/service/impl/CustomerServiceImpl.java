@@ -79,4 +79,12 @@ public class CustomerServiceImpl implements CustomerService {
         checkForCustomer(id);
         customerRepository.deleteById(id);
     }
+
+    @Override
+    public CustomerDto findByCartId(Integer cartId) {
+        CustomerEntity customer = customerRepository.findByCartCartId(cartId)
+                .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Customer with cart Id "+ cartId +" not founf")
+                );
+        return modelMapper.map(customer,CustomerDto.class);
+    }
 }

@@ -1,4 +1,4 @@
-package com.dune.greensupermarketbackend.cart.dto;
+package com.dune.greensupermarketbackend.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

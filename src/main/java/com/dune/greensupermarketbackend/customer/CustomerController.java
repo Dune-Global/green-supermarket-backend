@@ -52,4 +52,10 @@ public class CustomerController {
         customerService.updatePassword(customerId, passwordUpdateRequest);
         return ResponseEntity.ok("Password Update successful");
     }
+
+    @GetMapping("cart/{cart-id}")
+    public ResponseEntity<CustomerDto> findByCardId(@PathVariable("cart-id")Integer cartId){
+        CustomerDto customerDto = customerService.findByCartId(cartId);
+        return ResponseEntity.ok(customerDto);
+    }
 }
