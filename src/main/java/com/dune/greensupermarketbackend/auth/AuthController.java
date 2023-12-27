@@ -20,16 +20,19 @@ public class AuthController {
 
     private final AuthService service;
 
-    //Admin
+    //Admin sign up
     @PostMapping("admins/register")
     public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody AdminRegisterDto request) {
         return new ResponseEntity<>(service.registerAdmin(request), HttpStatus.CREATED);
     }
+
+    //Admin sign in
     @PostMapping("admins/authentication")
     public ResponseEntity<AuthenticationResponse> authenticateAdmin(@RequestBody AdminAuthenticationRequest request){
             return ResponseEntity.ok(service.authenticateAdmin(request));
     }
 
+    //Decode JWT token
     @GetMapping("admins/auth")
     public ResponseEntity<AdminAuthorizationResponse> authorizeAdmin(@RequestHeader("Authorization") String token){
 
@@ -40,17 +43,19 @@ public class AuthController {
     return ResponseEntity.ok(service.authorizeAdmin(token));
     }
 
-    //Customer
+    //Customer sign up
     @PostMapping("customers/register")
     public ResponseEntity<AuthenticationResponse> registerCustomer(@RequestBody CustomerRegisterDto request){
             return new ResponseEntity<>(service.registerCustomer(request),HttpStatus.CREATED);
     }
 
+    //Customer sign in
     @PostMapping("customers/authentication")
     public ResponseEntity<AuthenticationResponse> authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
             return ResponseEntity.ok(service.authenticateCustomer(request));
     }
 
+    //Decode JWT token
     @GetMapping("customers/auth")
     public ResponseEntity<CustomerAuthorizationResponse> authorizeCustomer(@RequestHeader("Authorization") String token){
 
