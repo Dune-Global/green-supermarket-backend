@@ -10,10 +10,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dune.greensupermarketbackend.mail.dto.EmailData;
 import com.dune.greensupermarketbackend.mail.service.MailService;
 
 import jakarta.mail.internet.MimeMessage;
-
+import com.dune.greensupermarketbackend.mail.dto.EmailData;
 @Service
 public class MailServiceImpl implements MailService {
 
@@ -24,29 +25,23 @@ public class MailServiceImpl implements MailService {
     private JavaMailSender javaMailSender;
 
     @Override
-    public String sendMail(MultipartFile[] file, String to, String[] cc, String subject, String body) {
+    public EmailData sendMail(EmailData emailData) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setFrom(fromEmail);
-            mimeMessageHelper.setTo(to);
-            mimeMessageHelper.setCc(cc);
-            mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(body);
-
-            for (int i = 0; i < file.length; i++) {
-                mimeMessageHelper.addAttachment(
-                        file[i].getOriginalFilename(),
-                        new ByteArrayResource(file[i].getBytes()));
-            }
+            mimeMessageHelper.setTo(emailData.getTo());
+            mimeMessageHelper.setCc(emailData.getCc());
+            mimeMessageHelper.setSubject(emailData.getSubject());
+            mimeMessageHelper.setText(emailData.getBody());
 
             javaMailSender.send(mimeMessage);
 
-            return "mail send";
+            return emailData;
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to send mail", e);
         }
     }
 
