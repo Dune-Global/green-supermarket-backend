@@ -1,17 +1,21 @@
 spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:prod}
   datasource:
-    url: jdbc:mysql://greensupermarket-mysqlserver-dev.mysql.database.azure.com:3306/greensupermarket-db-dev?sslMode=REQUIRED
-    username: mysql_admin_dev@greensupermarket-mysqlserver-dev
-    password: Lithara@2002
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 5
+      maximum-pool-size: 5 
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        jdbc:
+          time_zone: Asia/Kolkata
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
@@ -21,17 +25,19 @@ spring:
       max-request-size: -1
 
   azure:
+    base:
+      uri: ${AZURE_BASE_URI}
     storage:
       container:
-        name: greensupermarketblogcontainer
+        name: ${AZURE_CONTAINER}
       connection:
-        string: DefaultEndpointsProtocol=https;AccountName=greensupermarketstoreacc;AccountKey=fGIpZLaa/xXYrR/98HuVDVRWfUmEPHhRWlnYesob00ejEAh04jk6wm9HZVpb9s3u6hq3wC/hLitE+AStuQifMA==;EndpointSuffix=core.windows.net
+        string: ${AZURE_CONNECTION_STRING}
 
   mail:
-    host: smtp.gmail.com
-    username: info.duneglobal@gmail.com
-    password: zxtyyjxccxtpqtio
-    port: 587
+    host: ${EMAIL_HOST}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    port: ${EMAIL_PORT}
     properties:
       mail:
         smtp:
