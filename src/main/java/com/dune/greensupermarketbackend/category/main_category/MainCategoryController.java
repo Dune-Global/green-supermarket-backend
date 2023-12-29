@@ -95,5 +95,27 @@ public class MainCategoryController {
     return mainCategoriesWithSubs;
     }
 
+    @GetMapping("/subs/{mainCategoryId}")
+    public List<MainCategoryWithSubsDto> getAllMainCategories(@PathVariable("mainCategoryId") Integer mainCategoryId) {
+        MainCategoryDto mainCategory = mainCategoryService.getCategoryById(mainCategoryId);
+        List<MainCategoryWithSubsDto> mainCategoriesWithSubs = new ArrayList<>(); // Initialize the list
+
+        List<CategoryOneDto> categoryOnes = categoryOneService.getAllByMainCategory(mainCategory.getMainCategoryId());
+        List<CategoryOneWithSubsDto> categoryOneWithSubs = categoryOnes.stream().map(categoryOneDto -> modelMapper.map(categoryOneDto,CategoryOneWithSubsDto.class)).toList();
+        for (CategoryOneWithSubsDto categoryOne : categoryOneWithSubs) {
+            List<CategoryTwoDto> categoryTwos = categoryTwoService.getAllBySubCatOne(categoryOne.getSubCatOneId());
+            categoryOne.setCategoryTwos(categoryTwos);
+        }
+        MainCategoryWithSubsDto mainCategoryWithSubs = new MainCategoryWithSubsDto(
+                mainCategory.getMainCategoryId(),
+                mainCategory.getMainCategoryName(),
+                mainCategory.getMainCategoryDesc(),
+                mainCategory.getImgUrl(),
+                categoryOneWithSubs);
+        mainCategoriesWithSubs.add(mainCategoryWithSubs);
+
+        return mainCategoriesWithSubs;
+    }
+
 
 }
