@@ -1,16 +1,17 @@
 package com.dune.greensupermarketbackend.order.service;
 
 import com.dune.greensupermarketbackend.order.OrderDto;
+import com.dune.greensupermarketbackend.order.OrderResponseDto;
 
 import java.util.List;
 
 public interface OrderService {
-    OrderDto createOrder(OrderDto orderDto);
-    OrderDto updateOrderStatus(Integer orderId, OrderDto orderDto);
-    OrderDto updatePaymentStatus(Integer orderId, OrderDto orderDto);
-    List<OrderDto> findByOrderStatus(String orderStatus);
-    List<OrderDto> findByCustomerId(Integer customerId);
+    OrderResponseDto createOrder(OrderDto orderDto);
+    OrderResponseDto updateOrderStatus(Integer orderId, OrderDto orderDto);
+    OrderResponseDto updatePaymentStatus(Integer orderId, OrderDto orderDto);
+    List<OrderResponseDto> findByOrderStatus(String orderStatus);
+    List<OrderResponseDto> findByCustomerId(Integer customerId);
 
-    OrderDto payementSuccess(Integer orderId);
-    List<OrderDto> getAllOrders();
+    OrderResponseDto payementSuccess(Integer orderId);
+    List<OrderResponseDto> getAllOrders();
 }
