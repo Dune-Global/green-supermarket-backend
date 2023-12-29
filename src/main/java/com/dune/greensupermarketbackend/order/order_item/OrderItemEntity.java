@@ -23,7 +23,7 @@ public class OrderItemEntity {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "discount", nullable = false)
+    @Column(name = "discount")
     private Double discount;
 
     @Column(name = "total_amount", nullable = false)

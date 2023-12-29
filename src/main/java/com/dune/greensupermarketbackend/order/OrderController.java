@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("api/" + ApiVersionConfig.API_VERSION + "/order")
@@ -20,13 +22,8 @@ public class OrderController {
     }
 
     @PatchMapping("/order-status/{orderId}")
-    public ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Integer orderId, @RequestBody String orderStatus) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderStatus));
-    }
-
-    @PatchMapping("/payment-status/{orderId}")
-    public ResponseEntity<OrderDto> updatePaymentStatus(@PathVariable Integer orderId, @RequestBody String paymentStatus) {
-        return ResponseEntity.ok(orderService.updatePaymentStatus(orderId, paymentStatus));
+    public ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Integer orderId, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, orderDto));
     }
 
     @GetMapping("/order-status/{orderStatus}")
@@ -37,6 +34,16 @@ public class OrderController {
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> findByCustomerId(@PathVariable Integer customerId) {
         return ResponseEntity.ok(orderService.findByCustomerId(customerId));
+    }
+
+    @PatchMapping("/payment-success/{orderId}")
+    public ResponseEntity<OrderDto> payementSuccess(@PathVariable Integer orderId) {
+        return ResponseEntity.ok(orderService.payementSuccess(orderId));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
 }

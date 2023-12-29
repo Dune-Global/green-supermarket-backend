@@ -2,6 +2,8 @@ package com.dune.greensupermarketbackend.order.order_item.service.impl;
 
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
+import com.dune.greensupermarketbackend.discount.DiscountEntity;
+import com.dune.greensupermarketbackend.discount.DiscountRepository;
 import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
 import com.dune.greensupermarketbackend.discount.service.DiscountService;
 import com.dune.greensupermarketbackend.exception.APIException;
@@ -13,6 +15,7 @@ import com.dune.greensupermarketbackend.order.order_item.OrderItemRepository;
 import com.dune.greensupermarketbackend.order.order_item.service.OrderItemService;
 import com.dune.greensupermarketbackend.product.ProductEntity;
 import com.dune.greensupermarketbackend.product.ProductRepository;
+import com.dune.greensupermarketbackend.product.dto.ProductDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,13 +31,15 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DiscountService discountService;
+    private final DiscountRepository discountRepository;
 
-    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, ModelMapper modelMapper, OrderRepository orderRepository, ProductRepository productRepository, DiscountService discountService) {
+    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, ModelMapper modelMapper, OrderRepository orderRepository, ProductRepository productRepository, DiscountService discountService, DiscountRepository discountRepository) {
         this.orderItemRepository = orderItemRepository;
         this.modelMapper = modelMapper;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.discountService = discountService;
+        this.discountRepository = discountRepository;
     }
 
 
@@ -52,14 +57,32 @@ public class OrderItemServiceImpl implements OrderItemService {
                 );
     }
 
-    private Double getCurrentDiscountForProduct(ProductEntity product){
-        DiscountDto discountDto = discountService.getCurrentDiscountForProduct(product.getProductId());
-        return discountDto.getDiscountRate();
+    public Double getCurrentDiscountForProduct(ProductEntity product) {
+        Double discountedPrice = null;
+        DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(product.getProductId());
+        if (discountEntity != null) {
+            discountedPrice =  product.getOriginalPrice() - (product.getOriginalPrice() * discountEntity.getRate() / 100);
+        }else {
+            discountedPrice = product.getOriginalPrice();
+        }
+        return discountedPrice;
     }
-
 
     private Double checkDiscountedPrice(Double price, Double discount){
         return price - (price * discount / 100);
+    }
+
+    private OrderItemDto mapper(OrderItemEntity orderItemEntity){
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setOrderItemId(orderItemEntity.getOrderItemId());
+        orderItemDto.setOrderId(orderItemEntity.getOrder().getOrderId());
+        orderItemDto.setProductId(orderItemEntity.getProduct().getProductId());
+        orderItemDto.setQuantity(orderItemEntity.getQuantity());
+        orderItemDto.setPrice(orderItemEntity.getPrice());
+        orderItemDto.setDiscount(orderItemEntity.getDiscount());
+        orderItemDto.setTotalAmount(orderItemEntity.getTotalAmount());
+
+        return orderItemDto;
     }
 
     @Override
@@ -91,7 +114,8 @@ public class OrderItemServiceImpl implements OrderItemService {
         purchasedProduct.setStockAvailableUnits(purchasedProduct.getStockAvailableUnits()-quantity);
         productRepository.save(purchasedProduct);
 
-        return modelMapper.map(orderItem,OrderItemDto.class);
+
+        return mapper(orderItem);
     }
 
     @Override
@@ -100,15 +124,14 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(
                         ()-> new APIException(HttpStatus.NOT_FOUND,"Order Item not found with id "+orderItemId)
                 );
-        return modelMapper.map(orderItem,OrderItemDto.class);
+        return mapper(orderItem);
     }
 
     @Override
     public List<OrderItemDto> getByOrderId(Integer orderId) {
         List<OrderItemEntity> orderItems = orderItemRepository.findAllByOrderOrderId(orderId);
         return orderItems.stream().map(
-                (orderItem)->modelMapper
-                        .map(orderItem,OrderItemDto.class)).collect(Collectors.toList()
+                this::mapper).collect(Collectors.toList()
         );
     }
 }
