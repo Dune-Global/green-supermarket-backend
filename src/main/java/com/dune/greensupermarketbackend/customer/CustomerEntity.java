@@ -3,6 +3,7 @@ package com.dune.greensupermarketbackend.customer;
 import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
+import com.dune.greensupermarketbackend.order.OrderEntity;
 import com.dune.greensupermarketbackend.testimonial.TestimonialEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,12 +49,17 @@ public class CustomerEntity implements UserDetails {
     @OneToMany(mappedBy = "reviwer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestimonialEntity> testimonials;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderEntity> orders;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
     private CartEntity cart;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

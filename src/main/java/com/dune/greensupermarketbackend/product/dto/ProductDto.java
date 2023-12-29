@@ -1,6 +1,8 @@
 package com.dune.greensupermarketbackend.product.dto;
 
+import com.dune.greensupermarketbackend.config.CustomDoubleSerializer;
 import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +18,9 @@ public class ProductDto {
     private String productDescription;
     private String productImage;
     private String measuringUnit;
+    @JsonSerialize(using = CustomDoubleSerializer.class)
     private Double originalPrice;
+    @JsonSerialize(using = CustomDoubleSerializer.class)
     private Double currentPrice;
     private Integer stockKeepingUnits;
     private Integer stockAvailableUnits;

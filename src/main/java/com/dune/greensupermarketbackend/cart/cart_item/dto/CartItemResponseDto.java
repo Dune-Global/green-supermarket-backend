@@ -1,6 +1,5 @@
 package com.dune.greensupermarketbackend.cart.cart_item.dto;
 
-import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.product.dto.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
