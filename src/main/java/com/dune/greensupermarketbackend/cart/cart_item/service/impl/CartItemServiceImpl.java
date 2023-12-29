@@ -14,8 +14,7 @@ import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.product.ProductEntity;
 import com.dune.greensupermarketbackend.product.ProductRepository;
 import com.dune.greensupermarketbackend.product.dto.ProductDto;
-import com.dune.greensupermarketbackend.product.dto.ProductResponseDto;
-import com.dune.greensupermarketbackend.product.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -135,6 +134,7 @@ public class CartItemServiceImpl implements CartItemService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void deleteAllCartItems(Integer cartId) {
         cartItemRepository.deleteAllByCartCartId(cartId);

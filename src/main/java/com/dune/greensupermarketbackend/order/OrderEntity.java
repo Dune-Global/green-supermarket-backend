@@ -47,6 +47,12 @@ public class OrderEntity {
     @Column(name = "payment_status", nullable = false)
     private String paymentStatus;
 
+    @Column(name = "discount")
+    private Double discount;
+
+    @Column(name = "note")
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "billing_address_id", nullable = false)
     private AddressEntity billingAddress;
