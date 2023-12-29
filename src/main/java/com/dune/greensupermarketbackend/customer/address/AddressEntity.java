@@ -1,11 +1,14 @@
 package com.dune.greensupermarketbackend.customer.address;
 
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
+import com.dune.greensupermarketbackend.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -45,6 +48,12 @@ public class AddressEntity {
     private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
+
+    @OneToMany(mappedBy = "billingAddress")
+    private List<OrderEntity> billingOrders;
+
+    @OneToMany(mappedBy = "shippingAddress")
+    private List<OrderEntity> shippingOrders;
 }

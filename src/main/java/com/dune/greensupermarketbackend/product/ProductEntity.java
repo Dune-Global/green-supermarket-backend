@@ -7,6 +7,7 @@ import com.dune.greensupermarketbackend.category.sub_category.category_one.Categ
 import com.dune.greensupermarketbackend.category.sub_category.category_two.CategoryTwoEntity;
 
 import com.dune.greensupermarketbackend.discount.DiscountEntity;
+import com.dune.greensupermarketbackend.order.order_item.OrderItemEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,4 +69,7 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "product")
     private List<CartItemEntity> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItemEntity> orderItems;
 }

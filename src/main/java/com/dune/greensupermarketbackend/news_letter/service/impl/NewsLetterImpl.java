@@ -33,6 +33,9 @@ public class NewsLetterImpl implements NewsLetterService {
 
     @Override
     public NewsLetterResponseDto addEmail(NewsLetterDto newsLetterDto) {
+        if(newsLetterDto.getEmail().isEmpty()){
+            throw new APIException(HttpStatus.BAD_REQUEST,"Please enter your email");
+        }
 
         checkEmailAvailability(newsLetterDto.getEmail());
 

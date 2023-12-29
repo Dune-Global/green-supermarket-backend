@@ -37,10 +37,12 @@ public class AddressServiceImpl implements AddressService {
         addressEntity.setEmail(addressDto.getEmail());
         addressEntity.setPhoneNumber(addressDto.getPhoneNumber());
 
-        CustomerEntity customer = customerRepository.findById(addressDto.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + addressDto.getCustomerId()));
+        if(addressDto.getCustomerId() != null){
+            CustomerEntity customer = customerRepository.findById(addressDto.getCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + addressDto.getCustomerId()));
 
-        addressEntity.setCustomer(customer);
+            addressEntity.setCustomer(customer);
+        }
 
         return modelMapper.map(addressRepository.save(addressEntity),AddressDto.class);
     }
