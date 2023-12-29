@@ -6,12 +6,14 @@ import com.dune.greensupermarketbackend.cart.cart_item.service.CartItemService;
 import com.dune.greensupermarketbackend.cart.service.CartService;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import com.dune.greensupermarketbackend.customer.CustomerRepository;
+import com.dune.greensupermarketbackend.customer.address.AddressDto;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressRepository;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.order.OrderDto;
 import com.dune.greensupermarketbackend.order.OrderEntity;
 import com.dune.greensupermarketbackend.order.OrderRepository;
+import com.dune.greensupermarketbackend.order.OrderResponseDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemEntity;
 import com.dune.greensupermarketbackend.order.order_item.service.OrderItemService;
@@ -103,13 +105,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDto createOrder(OrderDto orderDto) {
+    public OrderResponseDto createOrder(OrderDto orderDto) {
 
         OrderEntity lastOrder = orderRepository.findLastOrderByCustomerId(orderDto.getCustomerId())
                 .orElse(null);
 
         if (lastOrder != null && !"Received".equals(lastOrder.getPaymentStatus())) {
             lastOrder.setPaymentStatus("Fail");
+            lastOrder.setOrderStatus("Payment Failed");
             orderRepository.save(lastOrder);
         }
 
@@ -144,45 +147,69 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(savedOrderEntity);
 
-        OrderDto orderDtoResponse = modelMapper.map(order,OrderDto.class);
+        OrderResponseDto orderDtoResponse = modelMapper.map(order,OrderResponseDto.class);
         orderDtoResponse.setOrderItems(orderItems);
+        orderDtoResponse.setBillingAddress(modelMapper.map(order.getBillingAddress(), AddressDto.class));
+        orderDtoResponse.setShippingAddress(modelMapper.map(order.getShippingAddress(), AddressDto.class));
 
         return orderDtoResponse;
     }
 
     @Override
-    public OrderDto updateOrderStatus(Integer orderId, OrderDto orderDto) {
+    public OrderResponseDto updateOrderStatus(Integer orderId, OrderDto orderDto) {
 
         OrderEntity order = checkOrder(orderId);
 
         order.setOrderStatus(orderDto.getOrderStatus());
 
-        return orderMapper(orderRepository.save(order));
+        OrderResponseDto orderDto1 =  modelMapper.map(orderMapper(orderRepository.save(order)),OrderResponseDto.class);
+        orderDto1.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+        orderDto1.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+
+        return orderDto1;
+
     }
 
     @Override
-    public OrderDto updatePaymentStatus(Integer orderId, OrderDto orderDto) {
+    public OrderResponseDto updatePaymentStatus(Integer orderId, OrderDto orderDto) {
         OrderEntity order = checkOrder(orderId);
         order.setPaymentStatus(orderDto.getPaymentStatus());
-        return orderMapper(orderRepository.save(order));
+        OrderResponseDto orderDto1 =  modelMapper.map(orderMapper(orderRepository.save(order)),OrderResponseDto.class);
+        orderDto1.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+        orderDto1.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+
+        return orderDto1;
     }
 
     @Override
-    public List<OrderDto> findByOrderStatus(String orderStatus) {
+    public List<OrderResponseDto> findByOrderStatus(String orderStatus) {
         List<OrderEntity> orders = orderRepository.findByOrderStatus(orderStatus);
-        return orders.stream().map(this::orderMapper).collect(Collectors.toList());
+
+        return orders.stream().map(order->{
+            OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
+            orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+            orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+            return orderResponseDto;
+        }
+        ).collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderDto> findByCustomerId(Integer customerId) {
+    public List<OrderResponseDto> findByCustomerId(Integer customerId) {
         checkCustomer(customerId);
 
         List<OrderEntity> orders = orderRepository.findByCustomerIdOrderByOrderDateDesc(customerId);
-        return orders.stream().map(this::orderMapper).collect(Collectors.toList());
+        return orders.stream().map(order->{
+                    OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
+                    orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+                    orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+                    return orderResponseDto;
+                }
+        ).collect(Collectors.toList());
     }
 
     @Override
-    public OrderDto payementSuccess(Integer orderId) {
+    public OrderResponseDto payementSuccess(Integer orderId) {
         OrderEntity order = checkOrder(orderId);
         order.setPaymentStatus("Success");
         order.setOrderStatus("Received");
@@ -191,14 +218,22 @@ public class OrderServiceImpl implements OrderService {
 
         cartItemService.deleteAllCartItems(order.getCustomer().getCart().getCartId());
 
-        return orderMapper(order);
+        OrderResponseDto orderDto1 =  modelMapper.map(orderMapper(orderRepository.save(order)),OrderResponseDto.class);
+        orderDto1.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+        orderDto1.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+
+        return orderDto1;
     }
 
     @Override
-    public List<OrderDto> getAllOrders() {
-        return orderRepository.findAll()
-                .stream()
-                .map(this::orderMapper).collect(Collectors.toList()
-                );
+    public List<OrderResponseDto> getAllOrders() {
+        List<OrderEntity> orders = orderRepository.findAll();
+        return orders.stream().map(order->{
+                    OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
+                    orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+                    orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+                    return orderResponseDto;
+                }
+        ).collect(Collectors.toList());
     }
 }
