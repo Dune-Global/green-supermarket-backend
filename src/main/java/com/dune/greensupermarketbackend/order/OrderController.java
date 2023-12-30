@@ -46,4 +46,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
+    @PostMapping("order/order-item")
+    public ResponseEntity<OrderResponseDto> payhere(@PathVariable Integer orderId) {
+        return ResponseEntity.ok(orderService.payementSuccess(orderId));
+    }
+
 }
