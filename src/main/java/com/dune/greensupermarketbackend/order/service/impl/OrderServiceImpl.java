@@ -213,6 +213,11 @@ public class OrderServiceImpl implements OrderService {
                     OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
                     orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
                     orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+                    orderResponseDto.setNote(order.getNote());
+
+                    List<OrderItemDto> orderItemDtos = orderItemService.getByOrderId(order.getOrderId());
+
+                    orderResponseDto.setOrderItems(orderItemDtos);
                     return orderResponseDto;
                 }
         ).collect(Collectors.toList());
@@ -232,6 +237,12 @@ public class OrderServiceImpl implements OrderService {
         orderDto1.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
         orderDto1.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
 
+        orderDto1.setNote(order.getNote());
+
+        List<OrderItemDto> orderItemDtos = orderItemService.getByOrderId(order.getOrderId());
+
+        orderDto1.setOrderItems(orderItemDtos);
+
         return orderDto1;
     }
 
@@ -242,6 +253,13 @@ public class OrderServiceImpl implements OrderService {
                     OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
                     orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
                     orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+
+                    orderResponseDto.setNote(order.getNote());
+
+                    List<OrderItemDto> orderItemDtos = orderItemService.getByOrderId(order.getOrderId());
+
+                    orderResponseDto.setOrderItems(orderItemDtos);
+
                     return orderResponseDto;
                 }
         ).collect(Collectors.toList());

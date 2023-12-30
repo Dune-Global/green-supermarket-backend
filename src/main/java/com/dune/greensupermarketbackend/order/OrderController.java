@@ -39,7 +39,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findByCustomerId(customerId));
     }
 
-    @PatchMapping("/payment-success/{orderId}")
+    @GetMapping("/payment-success/{orderId}")
     public ResponseEntity<OrderResponseDto> payementSuccess(@PathVariable Integer orderId) {
         return ResponseEntity.ok(orderService.payementSuccess(orderId));
     }

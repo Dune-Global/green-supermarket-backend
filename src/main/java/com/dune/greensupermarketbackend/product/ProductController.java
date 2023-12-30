@@ -1,6 +1,7 @@
 package com.dune.greensupermarketbackend.product;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
+import com.dune.greensupermarketbackend.brand.dto.BrandDto;
 import com.dune.greensupermarketbackend.product.dto.ProductDto;
 import com.dune.greensupermarketbackend.product.dto.ProductResponseDto;
 import com.dune.greensupermarketbackend.product.dto.ProductResponseMessageDto;
@@ -86,6 +87,23 @@ public class ProductController {
     @GetMapping("/search")
     public List<ProductDto> findProductsByName(@RequestParam String name) {
         return productService.findProductsByName(name);
+    }
+
+    @GetMapping("brands/main/{mainCatId}")
+    public ResponseEntity<List<BrandDto>> findBrandsOfMainCat(@PathVariable Integer mainCatId) {
+        List<BrandDto> brands = productService.findBrandsOfMainCat(mainCatId);
+        return new ResponseEntity<>(brands, HttpStatus.OK);
+    }
+
+    @GetMapping("brands/sub-one/{subCatOneId}")
+    public ResponseEntity<List<BrandDto>> findBrandsOfSubCat(@PathVariable Integer subCatOneId) {
+        List<BrandDto> brands = productService.findBrandsOfSubCat(subCatOneId);
+        return new ResponseEntity<>(brands, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public List<ProductResponseDto> getFilteredProducts(@RequestParam(required = false) Integer mainCatId, @RequestParam(required = false) Integer subCatId, @RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice) {
+        return productService.getFilteredProducts(mainCatId, subCatId, minPrice, maxPrice);
     }
 
 }

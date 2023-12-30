@@ -2,6 +2,7 @@ package com.dune.greensupermarketbackend.product.service.impl;
 
 import com.dune.greensupermarketbackend.brand.BrandEntity;
 import com.dune.greensupermarketbackend.brand.BrandRepository;
+import com.dune.greensupermarketbackend.brand.dto.BrandDto;
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryEntity;
 import com.dune.greensupermarketbackend.category.main_category.MainCategoryRepository;
 import com.dune.greensupermarketbackend.category.sub_category.category_one.CategoryOneEntity;
@@ -327,6 +328,29 @@ public class ProductServiceImpl implements ProductService {
         return productEntities.stream()
                 .map(productEntity -> modelMapper.map(productEntity, ProductDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandDto> findBrandsOfMainCat(Integer mainCatId) {
+        List<BrandEntity> mainCatBrands = productRepository.findDistinctBrandsByMainCategoryId(mainCatId);
+
+        return mainCatBrands.stream()
+                .map(brandEntity -> modelMapper.map(brandEntity, BrandDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandDto> findBrandsOfSubCat(Integer subCatOneId) {
+        List<BrandEntity> subCatBrands = productRepository.findDistinctBrandsBySubCatOneId(subCatOneId);
+        return subCatBrands.stream()
+                .map(brandEntity -> modelMapper.map(brandEntity, BrandDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponseDto> getFilteredProducts(Integer mainCatId, Integer subCatId, Double minPrice, Double maxPrice) {
+        List<ProductEntity> products = productRepository.findProductsByFilter(mainCatId, subCatId, minPrice, maxPrice);
+        return products.stream().map(product -> modelMapper.map(product, ProductResponseDto.class)).collect(Collectors.toList());
     }
 
 }
