@@ -23,4 +23,5 @@ public interface ProductService {
     List<ProductResponseDto> getProductsByCatTwoId(Integer catTwoId);
     List<ProductDto> getProductsByBrand(Integer brandId);
     List<ProductDto> getProductsWithoutSubs();
+    List<ProductDto> findProductsByName(String productName);
 }

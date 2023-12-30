@@ -320,4 +320,13 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductDto> findProductsByName(String productName) {
+        List<ProductEntity> productEntities = productRepository.findByProductNameContainingIgnoreCase(productName);
+        return productEntities.stream()
+                .map(productEntity -> modelMapper.map(productEntity, ProductDto.class))
+                .collect(Collectors.toList());
+    }
+
 }
