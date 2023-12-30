@@ -3,6 +3,8 @@ package com.dune.greensupermarketbackend.testimonial.service.impl;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
 import com.dune.greensupermarketbackend.customer.CustomerRepository;
 import com.dune.greensupermarketbackend.exception.APIException;
+import com.dune.greensupermarketbackend.order.OrderEntity;
+import com.dune.greensupermarketbackend.order.OrderRepository;
 import com.dune.greensupermarketbackend.testimonial.Dto.TestimonialRequestDto;
 import com.dune.greensupermarketbackend.testimonial.Dto.TestimonialResponseDto;
 import com.dune.greensupermarketbackend.testimonial.TestimonialEntity;
@@ -22,6 +24,7 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     private TestimonialRepository testimonialRepository;
     private CustomerRepository customerRepository;
+    private OrderRepository orderRepository;
     private ModelMapper modelMapper;
 
     public void validateTestimonialRequest(TestimonialRequestDto testimonialRequest) {
@@ -49,11 +52,17 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public TestimonialResponseDto addTestimonial(TestimonialRequestDto newTestimonial){
         validateTestimonialRequest(newTestimonial);
-        TestimonialEntity testimonialEntity = modelMapper.map(newTestimonial,TestimonialEntity.class);
-        testimonialEntity.setId(null);
 
         CustomerEntity customer = customerRepository.findById(newTestimonial.getCustomerId())
                 .orElseThrow(()->new APIException(HttpStatus.NOT_FOUND,"Customer not found"));
+
+        List<OrderEntity> orders = orderRepository.findByCustomerIdAndOrderStatus(customer.getId(), "Delivered");
+        if (orders.isEmpty()) {
+            throw new APIException(HttpStatus.BAD_REQUEST, "You need to have at least one delivered order to write a testimonial");
+        }
+
+        TestimonialEntity testimonialEntity = modelMapper.map(newTestimonial,TestimonialEntity.class);
+        testimonialEntity.setId(null);
 
         testimonialEntity.setReviwer(customer);
         testimonialEntity.setWrittenDate(java.time.LocalDateTime.now());
