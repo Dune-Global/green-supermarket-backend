@@ -10,6 +10,8 @@ import com.dune.greensupermarketbackend.customer.address.AddressDto;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressRepository;
 import com.dune.greensupermarketbackend.exception.APIException;
+import com.dune.greensupermarketbackend.mail.dto.EmailData;
+import com.dune.greensupermarketbackend.mail.service.MailService;
 import com.dune.greensupermarketbackend.order.dto.OrderDto;
 import com.dune.greensupermarketbackend.order.OrderEntity;
 import com.dune.greensupermarketbackend.order.OrderRepository;
@@ -40,8 +42,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemService orderItemService;
     private final CartService cartService;
     private final OrderItemRepository orderItemRepository;
+    private final MailService mailService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, AddressRepository addressRepository, ModelMapper modelMapper, CartItemService cartItemService, OrderItemService orderItemService, CartService cartService, OrderItemRepository orderItemRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, AddressRepository addressRepository, ModelMapper modelMapper, CartItemService cartItemService, OrderItemService orderItemService, CartService cartService, OrderItemRepository orderItemRepository, MailService mailService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
@@ -50,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderItemService = orderItemService;
         this.cartService = cartService;
         this.orderItemRepository = orderItemRepository;
+        this.mailService = mailService;
     }
 
     public AddressEntity checkAddress(Integer addressId){
@@ -242,6 +246,50 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItemDto> orderItemDtos = orderItemService.getByOrderId(order.getOrderId());
 
         orderDto1.setOrderItems(orderItemDtos);
+
+        StringBuilder tableRows = new StringBuilder();
+        for (OrderItemDto item : orderDto1.getOrderItems()) {
+            tableRows.append(String.format(
+                    "<tr><td>%s</td><td>%d</td><td>%.2f</td></tr>",
+                    item.getProductName(), item.getQuantity(), item.getPrice()
+            ));
+        }
+
+        String htmlBody =
+                "<!DOCTYPE html>" +
+                        "<html>" +
+                        "<head>" +
+                        "<style>" +
+                        "p { color: green; }" +
+                        "table { width: 100%; }" +
+                        "th, td { border: 1px solid black; padding: 5px; text-align: left; }" +
+                        "</style>" +
+                        "</head>" +
+                        "<body>" +
+                        "<p>Hi " +
+                        order.getCustomer().getFirstname()+" " +order.getCustomer().getLastname()+
+                        "</p><p>Your order has been placed successfully. Your order id is " +
+                        order.getOrderId() +
+                        "</p><p>You can view your order details in your account.</p>" +
+                        "<table>" +
+                        "<tr><th>Product Name</th><th>Quantity</th><th>Price</th></tr>" +
+                        tableRows.toString() +
+                        "</table>" +
+                        "<p>Thanks,</p>" +
+                        "<p>Green Supermarket</p>" +
+                        "</body>" +
+                        "</html>";
+
+
+
+        EmailData emailData = new EmailData(
+        order.getCustomer().getEmail(),
+        order.getCustomer().getEmail(),
+        "Order Successfully",
+        htmlBody
+        );
+
+        mailService.sendMail(emailData);
 
         return orderDto1;
     }
