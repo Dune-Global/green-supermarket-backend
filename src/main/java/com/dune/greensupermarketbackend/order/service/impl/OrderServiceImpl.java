@@ -17,6 +17,7 @@ import com.dune.greensupermarketbackend.order.dto.OrderResponseDto;
 import com.dune.greensupermarketbackend.order.dto.OrderWithItemsDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemEntity;
+import com.dune.greensupermarketbackend.order.order_item.OrderItemRepository;
 import com.dune.greensupermarketbackend.order.order_item.service.OrderItemService;
 import com.dune.greensupermarketbackend.order.service.OrderService;
 import jakarta.transaction.Transactional;
@@ -38,8 +39,9 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemService cartItemService;
     private final OrderItemService orderItemService;
     private final CartService cartService;
+    private final OrderItemRepository orderItemRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, AddressRepository addressRepository, ModelMapper modelMapper, CartItemService cartItemService, OrderItemService orderItemService, CartService cartService) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, AddressRepository addressRepository, ModelMapper modelMapper, CartItemService cartItemService, OrderItemService orderItemService, CartService cartService, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
@@ -47,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
         this.cartItemService = cartItemService;
         this.orderItemService = orderItemService;
         this.cartService = cartService;
+        this.orderItemRepository = orderItemRepository;
     }
 
     public AddressEntity checkAddress(Integer addressId){
@@ -111,9 +114,16 @@ public class OrderServiceImpl implements OrderService {
                 .orElse(null);
 
         if (lastOrder != null && !"Received".equals(lastOrder.getPaymentStatus())) {
+
+            lastOrder.getOrderItems().forEach(orderItem -> {
+                orderItem.getProduct().setStockAvailableUnits(orderItem.getProduct().getStockAvailableUnits() + orderItem.getQuantity());
+                orderItemRepository.save(orderItem);
+            });
+
             lastOrder.setPaymentStatus("Fail");
             lastOrder.setOrderStatus("Payment Failed");
             orderRepository.save(lastOrder);
+
         }
 
         OrderEntity order = modelMapper.map(orderDto,OrderEntity.class);
@@ -240,7 +250,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto getOrderWithItems(Integer orderId) {
         OrderEntity order = checkOrder(orderId);
-        OrderWithItemsDto orderWithItemsDto = new OrderWithItemsDto();
+
         OrderDto orderDto = orderMapper(checkOrder(orderId));
         OrderResponseDto orderResponseDto = modelMapper.map(orderDto, OrderResponseDto.class);
         orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));

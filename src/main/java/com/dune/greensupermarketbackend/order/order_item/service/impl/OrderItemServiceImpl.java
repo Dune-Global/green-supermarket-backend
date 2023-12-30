@@ -120,6 +120,9 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(()->
                         new APIException(HttpStatus.NOT_FOUND,"Product not found with "+product.getProductId()+" id")
                 );
+        if (purchasedProduct.getStockAvailableUnits() < quantity) {
+            throw new APIException(HttpStatus.BAD_REQUEST,"Only " + purchasedProduct.getStockAvailableUnits() + " units are available for "+purchasedProduct.getProductName() + " product");
+        }
 
         purchasedProduct.setStockAvailableUnits(purchasedProduct.getStockAvailableUnits()-quantity);
         productRepository.save(purchasedProduct);
