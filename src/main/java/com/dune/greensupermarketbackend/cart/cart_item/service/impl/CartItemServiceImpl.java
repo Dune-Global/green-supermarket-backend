@@ -156,15 +156,31 @@ public class CartItemServiceImpl implements CartItemService {
 
         ProductEntity product = cartItemEntity.getProduct();
 
+        CartItemResponseDto cartItem = mapper(cartItemEntity);
+
+
+
         if (cartItemRequestDto.getQuantity() <= 0) {
             cartItemRepository.delete(cartItemEntity);
-            return null;
+            throw  new APIException(HttpStatus.BAD_REQUEST,"Item removed from cart");
         } else if (product.getStockAvailableUnits() < cartItemRequestDto.getQuantity()) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Only " + product.getStockAvailableUnits() + " units are available");
         } else {
             cartItemEntity.setQuantity(cartItemRequestDto.getQuantity());
             CartItemEntity updatedCartItem = cartItemRepository.save(cartItemEntity);
-            return mapper(updatedCartItem);
+
+            CartItemResponseDto responseDto = mapper(updatedCartItem);
+
+            DiscountEntity discount = discountRepository.findCurrentDiscountForProduct(cartItem.getProduct().getProductId());
+            if (discount != null) {
+                DiscountDto discountDto = modelMapper.map(discount, DiscountDto.class);
+                responseDto.getProduct().setDiscount(discountDto);
+            }
+
+            responseDto.getProduct().setCurrentPrice(getDiscountedPrice(cartItem.getProduct()));
+            responseDto.getProduct().setRating(getRating(cartItem.getProduct()));
+
+            return responseDto;
         }
     }
 }
