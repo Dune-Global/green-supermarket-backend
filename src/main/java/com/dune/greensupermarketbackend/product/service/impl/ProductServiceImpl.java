@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.dune.greensupermarketbackend.product_rating.dto.RatingForProductDto;
+import com.dune.greensupermarketbackend.product_rating.service.RatingService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryTwoRepository categoryTwoRepository;
     private DiscountRepository discountRepository;
     private ModelMapper modelMapper;
+    private RatingService ratingService;
 
     public void checkCategories(ProductDto productDto){
         Integer mainCatId = productDto.getMainCategoryId();
@@ -71,9 +74,8 @@ public class ProductServiceImpl implements ProductService {
         return discountedPrice;
     }
 
-    public Double getRate(ProductEntity productEntity) {
-        Double rate = 5.0;
-        return rate;
+    public RatingForProductDto getRate(ProductEntity productEntity) {
+        return ratingService.getAverageRatingByProductId(productEntity.getProductId());
     }
 
 
@@ -191,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
                         productResponseDto.setDiscount(discountDto);
                     }
                     productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-                    productResponseDto.setRate(getRate(product));
+                    productResponseDto.setRating(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -216,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
 
         }
         productResponseDto.setCurrentPrice(getDiscountedPrice(productEntity));
-        productResponseDto.setRate(getRate(productEntity));
+        productResponseDto.setRating(getRate(productEntity));
 
         return productResponseDto;
     }
@@ -235,7 +237,7 @@ public class ProductServiceImpl implements ProductService {
                 productResponseDto.setDiscount(discountDto);
             }
             productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-            productResponseDto.setRate(getRate(product));
+            productResponseDto.setRating(getRate(product));
             return productResponseDto;
         })
         .collect(Collectors.toList());
@@ -255,7 +257,7 @@ public class ProductServiceImpl implements ProductService {
                         productResponseDto.setDiscount(discountDto);
                     }
                     productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-                    productResponseDto.setRate(getRate(product));
+                    productResponseDto.setRating(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -275,7 +277,7 @@ public class ProductServiceImpl implements ProductService {
                         productResponseDto.setDiscount(discountDto);
                     }
                     productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-                    productResponseDto.setRate(getRate(product));
+                    productResponseDto.setRating(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -295,7 +297,7 @@ public class ProductServiceImpl implements ProductService {
                         productResponseDto.setDiscount(discountDto);
                     }
                     productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-                    productResponseDto.setRate(getRate(product));
+                    productResponseDto.setRating(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());
@@ -313,7 +315,7 @@ public class ProductServiceImpl implements ProductService {
                         productResponseDto.setDiscount(discountDto);
                     }
                     productResponseDto.setCurrentPrice(getDiscountedPrice(product));
-                    productResponseDto.setRate(getRate(product));
+                    productResponseDto.setRating(getRate(product));
                     return productResponseDto;
                 })
                 .collect(Collectors.toList());

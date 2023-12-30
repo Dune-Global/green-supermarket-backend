@@ -1,10 +1,8 @@
 package com.dune.greensupermarketbackend.order.order_item.service.impl;
 
-import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 import com.dune.greensupermarketbackend.discount.DiscountEntity;
 import com.dune.greensupermarketbackend.discount.DiscountRepository;
-import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
 import com.dune.greensupermarketbackend.discount.service.DiscountService;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.order.OrderEntity;
@@ -15,7 +13,9 @@ import com.dune.greensupermarketbackend.order.order_item.OrderItemRepository;
 import com.dune.greensupermarketbackend.order.order_item.service.OrderItemService;
 import com.dune.greensupermarketbackend.product.ProductEntity;
 import com.dune.greensupermarketbackend.product.ProductRepository;
-import com.dune.greensupermarketbackend.product.dto.ProductDto;
+import com.dune.greensupermarketbackend.product_rating.dto.RatingDto;
+import com.dune.greensupermarketbackend.product_rating.RatingEntity;
+import com.dune.greensupermarketbackend.product_rating.RatingRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,19 +27,28 @@ import java.util.stream.Collectors;
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
-    private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DiscountService discountService;
     private final DiscountRepository discountRepository;
+    private final RatingRepository ratingRepository;
+    private final ModelMapper modelMapper;
 
-    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, ModelMapper modelMapper, OrderRepository orderRepository, ProductRepository productRepository, DiscountService discountService, DiscountRepository discountRepository) {
+    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, ModelMapper modelMapper, OrderRepository orderRepository, ProductRepository productRepository, DiscountService discountService, DiscountRepository discountRepository, RatingRepository ratingRepository, ModelMapper modelMapper1) {
         this.orderItemRepository = orderItemRepository;
-        this.modelMapper = modelMapper;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.discountService = discountService;
         this.discountRepository = discountRepository;
+        this.ratingRepository = ratingRepository;
+        this.modelMapper = modelMapper1;
+
+//        modelMapper.addMappings(new PropertyMap<RatingEntity, RatingDto>() {
+//            @Override
+//            protected void configure() {
+//                map().setOrderItemId(source.getOrderItem().getOrderItemId());
+//            }
+//        });
     }
 
 
@@ -77,10 +86,18 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemDto.setOrderItemId(orderItemEntity.getOrderItemId());
         orderItemDto.setOrderId(orderItemEntity.getOrder().getOrderId());
         orderItemDto.setProductId(orderItemEntity.getProduct().getProductId());
+        orderItemDto.setProductName(orderItemEntity.getProduct().getProductName());
+        orderItemDto.setProductImage(orderItemEntity.getProduct().getProductImage());
         orderItemDto.setQuantity(orderItemEntity.getQuantity());
         orderItemDto.setPrice(orderItemEntity.getPrice());
         orderItemDto.setDiscount(orderItemEntity.getDiscount());
         orderItemDto.setTotalAmount(orderItemEntity.getTotalAmount());
+
+        RatingEntity ratingEntity = ratingRepository.findByOrderItemOrderItemId(orderItemEntity.getOrderItemId());
+        if (ratingEntity != null) {
+            RatingDto ratingDto = modelMapper.map(ratingEntity, RatingDto.class);
+            orderItemDto.setRating(ratingDto);
+        }
 
         return orderItemDto;
     }

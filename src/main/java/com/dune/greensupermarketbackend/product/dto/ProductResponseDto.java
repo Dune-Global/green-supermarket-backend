@@ -7,6 +7,7 @@ import com.dune.greensupermarketbackend.category.sub_category.category_two.dto.C
 
 import com.dune.greensupermarketbackend.config.CustomDoubleSerializer;
 import com.dune.greensupermarketbackend.discount.dto.DiscountDto;
+import com.dune.greensupermarketbackend.product_rating.dto.RatingForProductDto;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +39,5 @@ public class ProductResponseDto {
     private String l1CategoryName;
     private String l2CategoryName;
     private DiscountDto discount;
-    private Double rate;
+    private RatingForProductDto rating;
 }

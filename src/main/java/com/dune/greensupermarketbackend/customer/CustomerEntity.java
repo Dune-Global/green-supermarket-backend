@@ -4,6 +4,7 @@ import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
 import com.dune.greensupermarketbackend.order.OrderEntity;
+import com.dune.greensupermarketbackend.product_rating.RatingEntity;
 import com.dune.greensupermarketbackend.testimonial.TestimonialEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,8 @@ public class CustomerEntity implements UserDetails {
     private CartEntity cart;
 
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RatingEntity> ratings;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

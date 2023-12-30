@@ -2,6 +2,7 @@ package com.dune.greensupermarketbackend.order.order_item;
 
 import com.dune.greensupermarketbackend.order.OrderEntity;
 import com.dune.greensupermarketbackend.product.ProductEntity;
+import com.dune.greensupermarketbackend.product_rating.RatingEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,4 +37,7 @@ public class OrderItemEntity {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
+
+    @OneToOne(mappedBy = "orderItem", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+    private RatingEntity rating;
 }
