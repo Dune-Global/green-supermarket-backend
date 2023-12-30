@@ -14,6 +14,8 @@ import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.product.ProductEntity;
 import com.dune.greensupermarketbackend.product.ProductRepository;
 import com.dune.greensupermarketbackend.product.dto.ProductDto;
+import com.dune.greensupermarketbackend.product_rating.dto.RatingForProductDto;
+import com.dune.greensupermarketbackend.product_rating.service.RatingService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -30,13 +32,15 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProductRepository productRepository;
     private final DiscountRepository discountRepository;
     private final ModelMapper modelMapper;
+    private final RatingService ratingService;
 
-    public CartItemServiceImpl(CartItemRepository cartItemRepository, CartRepository cartRepository, ProductRepository productRepository, DiscountRepository discountRepository, ModelMapper modelMapper) {
+    public CartItemServiceImpl(CartItemRepository cartItemRepository, CartRepository cartRepository, ProductRepository productRepository, DiscountRepository discountRepository, ModelMapper modelMapper, RatingService ratingService) {
         this.cartItemRepository = cartItemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.discountRepository = discountRepository;
         this.modelMapper = modelMapper;
+        this.ratingService = ratingService;
     }
 
     public CartItemResponseDto mapper(CartItemEntity cartItemEntity){
@@ -61,9 +65,8 @@ public class CartItemServiceImpl implements CartItemService {
         return discountedPrice;
     }
 
-    public Double getRate(ProductDto productDto) {
-        Double rate = 5.0;
-        return rate;
+    public RatingForProductDto getRating(ProductDto productDto) {
+        return ratingService.getAverageRatingByProductId(productDto.getProductId());
     }
 
     @Override
@@ -99,7 +102,7 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         cartItem.getProduct().setCurrentPrice(getDiscountedPrice(cartItem.getProduct()));
-        cartItem.getProduct().setRate(getRate(cartItem.getProduct()));
+        cartItem.getProduct().setRating(getRating(cartItem.getProduct()));
 
         return cartItem;
     }
@@ -128,7 +131,7 @@ public class CartItemServiceImpl implements CartItemService {
                         cartItemResponseDto.getProduct().setDiscount(discountDto);
                     }
                     cartItemResponseDto.getProduct().setCurrentPrice(getDiscountedPrice(cartItemResponseDto.getProduct()));
-                    cartItemResponseDto.getProduct().setRate(getRate(cartItemResponseDto.getProduct()));
+                    cartItemResponseDto.getProduct().setRating(getRating(cartItemResponseDto.getProduct()));
                     return cartItemResponseDto;
 
         }).collect(Collectors.toList());
