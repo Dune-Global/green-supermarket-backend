@@ -27,4 +27,6 @@ public interface ProductService {
     List<ProductDto> findProductsByName(String productName);
     List<BrandDto> findBrandsOfMainCat(Integer mainCatId);
     List<BrandDto> findBrandsOfSubCat(Integer subCatOneId);
+
+    List<ProductResponseDto> getFilteredProducts(Integer mainCatId, Integer subCatId, Double minPrice, Double maxPrice);
 }

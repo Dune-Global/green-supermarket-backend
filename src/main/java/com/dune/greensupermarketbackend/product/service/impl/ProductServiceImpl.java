@@ -347,4 +347,10 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductResponseDto> getFilteredProducts(Integer mainCatId, Integer subCatId, Double minPrice, Double maxPrice) {
+        List<ProductEntity> products = productRepository.findProductsByFilter(mainCatId, subCatId, minPrice, maxPrice);
+        return products.stream().map(product -> modelMapper.map(product, ProductResponseDto.class)).collect(Collectors.toList());
+    }
+
 }

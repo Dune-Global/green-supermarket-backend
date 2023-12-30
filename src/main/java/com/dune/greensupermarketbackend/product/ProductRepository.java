@@ -23,4 +23,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query("SELECT DISTINCT p.brand FROM ProductEntity p WHERE p.l1Category.subCatOneId = :subCatOneId")
     List<BrandEntity> findDistinctBrandsBySubCatOneId(@Param("subCatOneId") Integer subCatOneId);
 
+    @Query("SELECT p FROM ProductEntity p WHERE (:mainCatId is null or p.mainCategory.mainCategoryId = :mainCatId) and (:subCatId is null or p.l1Category.subCatOneId = :subCatId) and (:minPrice is null or p.originalPrice >= :minPrice) and (:maxPrice is null or p.originalPrice <= :maxPrice)")
+    List<ProductEntity> findProductsByFilter(@Param("mainCatId") Integer mainCatId, @Param("subCatId") Integer subCatId, @Param("minPrice") Double minPrice, @Param("maxPrice") Double maxPrice);
 }

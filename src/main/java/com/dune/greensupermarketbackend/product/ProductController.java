@@ -101,4 +101,9 @@ public class ProductController {
         return new ResponseEntity<>(brands, HttpStatus.OK);
     }
 
+    @GetMapping("/filter")
+    public List<ProductResponseDto> getFilteredProducts(@RequestParam(required = false) Integer mainCatId, @RequestParam(required = false) Integer subCatId, @RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice) {
+        return productService.getFilteredProducts(mainCatId, subCatId, minPrice, maxPrice);
+    }
+
 }
