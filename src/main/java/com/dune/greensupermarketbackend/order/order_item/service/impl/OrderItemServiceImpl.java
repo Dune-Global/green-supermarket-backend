@@ -42,13 +42,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         this.discountRepository = discountRepository;
         this.ratingRepository = ratingRepository;
         this.modelMapper = modelMapper1;
-
-//        modelMapper.addMappings(new PropertyMap<RatingEntity, RatingDto>() {
-//            @Override
-//            protected void configure() {
-//                map().setOrderItemId(source.getOrderItem().getOrderItemId());
-//            }
-//        });
     }
 
 
@@ -67,18 +60,18 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     public Double getCurrentDiscountForProduct(ProductEntity product) {
-        Double discountedPrice = null;
+        Double discount = 0.0;
         DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(product.getProductId());
         if (discountEntity != null) {
-            discountedPrice =  product.getOriginalPrice() - (product.getOriginalPrice() * discountEntity.getRate() / 100);
+            discount = product.getOriginalPrice() * discountEntity.getRate() / 100;
         }else {
-            discountedPrice = product.getOriginalPrice();
+            discount = 0.0;
         }
-        return discountedPrice;
+        return discount;
     }
 
     private Double checkDiscountedPrice(Double price, Double discount){
-        return price - (price * discount / 100);
+        return price - discount;
     }
 
     private OrderItemDto mapper(OrderItemEntity orderItemEntity){
@@ -111,14 +104,14 @@ public class OrderItemServiceImpl implements OrderItemService {
         Double discount = getCurrentDiscountForProduct(product);
         Double discountPrice = checkDiscountedPrice(product.getOriginalPrice(),discount);
         Integer quantity = item.getQuantity();
-        Double totalAmount = ((originalPrice-discountPrice) * quantity);
+        Double totalAmount = (discountPrice * quantity);
 
         OrderItemEntity orderItem = new OrderItemEntity();
         orderItem.setOrder(order);
         orderItem.setProduct(product);
         orderItem.setQuantity(quantity);
         orderItem.setPrice(originalPrice);
-        orderItem.setDiscount(discountPrice*quantity);
+        orderItem.setDiscount(discount*quantity);
         orderItem.setTotalAmount(totalAmount);
 
         orderItem = orderItemRepository.save(orderItem);

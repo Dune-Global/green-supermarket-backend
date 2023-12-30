@@ -1,6 +1,6 @@
 package com.dune.greensupermarketbackend.order.service.impl;
 
-import com.dune.greensupermarketbackend.cart.CartWithItemsDto;
+import com.dune.greensupermarketbackend.cart.dto.CartWithItemsDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 import com.dune.greensupermarketbackend.cart.cart_item.service.CartItemService;
 import com.dune.greensupermarketbackend.cart.service.CartService;
@@ -10,10 +10,11 @@ import com.dune.greensupermarketbackend.customer.address.AddressDto;
 import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressRepository;
 import com.dune.greensupermarketbackend.exception.APIException;
-import com.dune.greensupermarketbackend.order.OrderDto;
+import com.dune.greensupermarketbackend.order.dto.OrderDto;
 import com.dune.greensupermarketbackend.order.OrderEntity;
 import com.dune.greensupermarketbackend.order.OrderRepository;
-import com.dune.greensupermarketbackend.order.OrderResponseDto;
+import com.dune.greensupermarketbackend.order.dto.OrderResponseDto;
+import com.dune.greensupermarketbackend.order.dto.OrderWithItemsDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemDto;
 import com.dune.greensupermarketbackend.order.order_item.OrderItemEntity;
 import com.dune.greensupermarketbackend.order.order_item.service.OrderItemService;
@@ -25,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -235,5 +235,21 @@ public class OrderServiceImpl implements OrderService {
                     return orderResponseDto;
                 }
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDto getOrderWithItems(Integer orderId) {
+        OrderEntity order = checkOrder(orderId);
+        OrderWithItemsDto orderWithItemsDto = new OrderWithItemsDto();
+        OrderDto orderDto = orderMapper(checkOrder(orderId));
+        OrderResponseDto orderResponseDto = modelMapper.map(orderDto, OrderResponseDto.class);
+        orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
+        orderResponseDto.setShippingAddress(modelMapper.map(order.getShippingAddress(),AddressDto.class));
+        orderResponseDto.setNote(order.getNote());
+
+        List<OrderItemDto> orderItemDtos = orderItemService.getByOrderId(orderId);
+
+        orderResponseDto.setOrderItems(orderItemDtos);
+        return orderResponseDto;
     }
 }

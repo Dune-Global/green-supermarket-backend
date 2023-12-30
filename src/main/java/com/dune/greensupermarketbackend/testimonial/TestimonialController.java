@@ -31,6 +31,4 @@ public class TestimonialController {
         return testimonialService.findAllByOrderByWrittenDateDesc();
     }
 
-    public static class TestimonialDto {
-    }
 }

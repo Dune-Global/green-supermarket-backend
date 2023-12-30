@@ -1,7 +1,8 @@
 package com.dune.greensupermarketbackend.order.service;
 
-import com.dune.greensupermarketbackend.order.OrderDto;
-import com.dune.greensupermarketbackend.order.OrderResponseDto;
+import com.dune.greensupermarketbackend.order.dto.OrderDto;
+import com.dune.greensupermarketbackend.order.dto.OrderResponseDto;
+import com.dune.greensupermarketbackend.order.dto.OrderWithItemsDto;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface OrderService {
 
     OrderResponseDto payementSuccess(Integer orderId);
     List<OrderResponseDto> getAllOrders();
+    OrderResponseDto getOrderWithItems(Integer orderId);
 }

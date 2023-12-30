@@ -1,6 +1,5 @@
 package com.dune.greensupermarketbackend.cart.cart_item.service;
 
-import com.dune.greensupermarketbackend.cart.CartWithItemsDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemRequestDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 
