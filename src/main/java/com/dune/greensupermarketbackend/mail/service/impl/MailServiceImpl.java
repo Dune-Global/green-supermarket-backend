@@ -34,7 +34,7 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setTo(emailData.getTo());
             mimeMessageHelper.setCc(emailData.getCc());
             mimeMessageHelper.setSubject(emailData.getSubject());
-            mimeMessageHelper.setText(emailData.getBody());
+            mimeMessageHelper.setText(emailData.getBody(), true); // second parameter indicates that the text is HTML
 
             javaMailSender.send(mimeMessage);
 

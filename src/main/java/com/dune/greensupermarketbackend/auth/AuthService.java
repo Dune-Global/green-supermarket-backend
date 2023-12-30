@@ -11,6 +11,8 @@ import com.dune.greensupermarketbackend.config.JwtService;
 import com.dune.greensupermarketbackend.customer.*;
 import com.dune.greensupermarketbackend.exception.APIException;
 import com.dune.greensupermarketbackend.admin.RoleEnum;
+import com.dune.greensupermarketbackend.mail.dto.EmailData;
+import com.dune.greensupermarketbackend.mail.service.MailService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,6 +36,7 @@ public class AuthService {
         private final AuthenticationManager authenticationManager;
         private final CartService cartService;
         private final ModelMapper modelMapper;
+        private final MailService mailService;
 
         private Map<String, Object> customerExtraClaims(CustomerEntity customer) {
                 Map<String, Object> customerExtraClaims = new HashMap<>();
@@ -127,10 +130,39 @@ public class AuthService {
 
                 Map<String, Object> customerExtraClaims = customerExtraClaims(customer);
                 var jwtToken = jwtService.generateToken(customerExtraClaims, customer);
+
+
+                String htmlBody =
+                        "<!DOCTYPE html>" +
+                                "<html>" +
+                                "<head>" +
+                                "<style>" +
+                                "p { color: green; }" +
+                                "</style>" +
+                                "</head>" +
+                                "<body>" +
+                                "<img src='https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/989b832d-c8f2-411c-95e8-3abf284d8fc6.png' alt='Italian Trulli'>" +
+                                "<p>Hi " +
+                                customer.getFirstname() + " " + customer.getLastname() +
+                                "</p><p>Welcome to Green Supermarket!</p><p>Your registration has been successful</p>" +
+                                "<p>Thanks,</p>" +
+                                "<p>Green Supermarket</p>" +
+                                "</body>" +
+                                "</html>";
+
+                EmailData emailData = new EmailData(
+                        customer.getEmail(),
+                        customer.getEmail(),
+                        "Welcome to Green Supermarket!",
+                        htmlBody
+                );
+
+                mailService.sendMail(emailData);
+
                 return AuthenticationResponse.builder()
-                                .token(jwtToken)
-                                .message("Register Successfully")
-                                .build();
+                        .token(jwtToken)
+                        .message("Register Successfully")
+                        .build();
         }
 
         // Customer sign in
