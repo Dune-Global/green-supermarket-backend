@@ -1,6 +1,9 @@
 package com.dune.greensupermarketbackend.order;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
+import com.dune.greensupermarketbackend.order.dto.OrderDto;
+import com.dune.greensupermarketbackend.order.dto.OrderResponseDto;
+import com.dune.greensupermarketbackend.order.dto.OrderWithItemsDto;
 import com.dune.greensupermarketbackend.order.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +52,11 @@ public class OrderController {
     @PostMapping("order/order-item/{orderId}")
     public ResponseEntity<OrderResponseDto> payhere(@PathVariable Integer orderId) {
         return ResponseEntity.ok(orderService.payementSuccess(orderId));
+    }
+
+    @GetMapping("/order-with-items/{orderId}")
+    public ResponseEntity<OrderResponseDto> getOrderWithItems(@PathVariable Integer orderId) {
+        return ResponseEntity.ok(orderService.getOrderWithItems(orderId));
     }
 
 }

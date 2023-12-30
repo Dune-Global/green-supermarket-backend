@@ -1,4 +1,4 @@
-package com.dune.greensupermarketbackend.cart;
+package com.dune.greensupermarketbackend.cart.dto;
 
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 import com.dune.greensupermarketbackend.config.CustomDoubleSerializer;

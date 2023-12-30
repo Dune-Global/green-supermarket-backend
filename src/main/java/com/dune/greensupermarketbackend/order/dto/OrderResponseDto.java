@@ -1,4 +1,4 @@
-package com.dune.greensupermarketbackend.order;
+package com.dune.greensupermarketbackend.order.dto;
 
 import com.dune.greensupermarketbackend.config.CustomDoubleSerializer;
 import com.dune.greensupermarketbackend.customer.address.AddressDto;

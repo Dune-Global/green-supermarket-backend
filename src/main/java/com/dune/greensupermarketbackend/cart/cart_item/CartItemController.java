@@ -1,7 +1,7 @@
 package com.dune.greensupermarketbackend.cart.cart_item;
 
 import com.dune.greensupermarketbackend.ApiVersionConfig;
-import com.dune.greensupermarketbackend.cart.CartWithItemsDto;
+import com.dune.greensupermarketbackend.cart.dto.CartWithItemsDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemRequestDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 import com.dune.greensupermarketbackend.cart.cart_item.service.CartItemService;

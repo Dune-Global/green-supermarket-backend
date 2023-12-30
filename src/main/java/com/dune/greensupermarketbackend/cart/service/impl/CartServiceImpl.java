@@ -1,6 +1,6 @@
 package com.dune.greensupermarketbackend.cart.service.impl;
 
-import com.dune.greensupermarketbackend.cart.CartWithItemsDto;
+import com.dune.greensupermarketbackend.cart.dto.CartWithItemsDto;
 import com.dune.greensupermarketbackend.cart.cart_item.dto.CartItemResponseDto;
 import com.dune.greensupermarketbackend.cart.cart_item.service.CartItemService;
 import com.dune.greensupermarketbackend.customer.CustomerEntity;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dune.greensupermarketbackend.cart.CartEntity;
 import com.dune.greensupermarketbackend.cart.CartRepository;
-import com.dune.greensupermarketbackend.cart.CartDto;
+import com.dune.greensupermarketbackend.cart.dto.CartDto;
 import com.dune.greensupermarketbackend.cart.service.CartService;
 
 import java.util.List;
