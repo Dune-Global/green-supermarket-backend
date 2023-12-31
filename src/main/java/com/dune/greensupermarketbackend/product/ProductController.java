@@ -106,4 +106,8 @@ public class ProductController {
         return productService.getFilteredProducts(mainCatId, subCatId, minPrice, maxPrice);
     }
 
+    @GetMapping("/top-selling")
+    public List<ProductResponseDto> getTop10BestSellingProducts() {
+        return productService.getTop10BestSellingProducts();
+    }
 }

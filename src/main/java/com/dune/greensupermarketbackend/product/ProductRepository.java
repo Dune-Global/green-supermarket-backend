@@ -25,4 +25,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
     @Query("SELECT p FROM ProductEntity p WHERE (:mainCatId is null or p.mainCategory.mainCategoryId = :mainCatId) and (:subCatId is null or p.l1Category.subCatOneId = :subCatId) and (:minPrice is null or p.originalPrice >= :minPrice) and (:maxPrice is null or p.originalPrice <= :maxPrice)")
     List<ProductEntity> findProductsByFilter(@Param("mainCatId") Integer mainCatId, @Param("subCatId") Integer subCatId, @Param("minPrice") Double minPrice, @Param("maxPrice") Double maxPrice);
+
+    @Query("SELECT p " +
+            "FROM OrderEntity o " +
+            "JOIN o.orderItems oi " +
+            "JOIN oi.product p " +
+            "WHERE o.paymentStatus = 'Success' " +
+            "GROUP BY p " +
+            "ORDER BY SUM(oi.quantity) DESC")
+    List<ProductEntity> findTop10BestSellingProducts();
 }
