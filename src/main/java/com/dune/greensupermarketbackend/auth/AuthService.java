@@ -136,17 +136,19 @@ public class AuthService {
                         "<!DOCTYPE html>" +
                                 "<html>" +
                                 "<head>" +
+                                "<link href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet'>" +
                                 "<style>" +
-                                "p { color: green; }" +
+                                "body { font-family: 'Poppins', sans-serif; }" +
+                                "h3 { color: #191919; }" +
+                                "p { color: rgb(71, 71, 71); }" +
                                 "</style>" +
                                 "</head>" +
                                 "<body>" +
-                                "<img src='https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/989b832d-c8f2-411c-95e8-3abf284d8fc6.png' alt='Italian Trulli'>" +
-                                "<p>Hi " +
-                                customer.getFirstname() + " " + customer.getLastname() +
-                                "</p><p>Welcome to Green Supermarket!</p><p>Your registration has been successful</p>" +
-                                "<p>Thanks,</p>" +
-                                "<p>Green Supermarket</p>" +
+                                "<p style=\"padding-top: 40px;\"><strong>Hi " + customer.getFirstname() + " " + customer.getLastname() + ",</strong></p>" +
+                                "<p>Your registration has been successful.</p>" +
+                                "<p><a href='https://shop.green-supermarket.com'>Shop Here</a></p>" +
+                                "<p>Thank you.</p>" +
+                                "<p><a href='https://shop.green-supermarket.com'><span style=\"color: #00b207; font-weight: 500\">GREEN </span><span style=\"color: black; font-weight: 500\">SUPERMARKET</span></a></p>" +
                                 "</body>" +
                                 "</html>";
 
