@@ -353,4 +353,22 @@ public class ProductServiceImpl implements ProductService {
         return products.stream().map(product -> modelMapper.map(product, ProductResponseDto.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductResponseDto> getTop10BestSellingProducts() {
+        List<ProductEntity> products = productRepository.findTop10BestSellingProducts();
+        return products.stream()
+                .map(product -> {
+                    ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+                    DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(product.getProductId());
+                    if (discountEntity != null) {
+                        DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
+                        productResponseDto.setDiscount(discountDto);
+                    }
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(product));
+                    productResponseDto.setRating(getRate(product));
+                    return productResponseDto;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
