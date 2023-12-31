@@ -14,4 +14,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Integer>{
     Optional<OrderEntity> findLastOrderByCustomerId(@Param("customerId") Integer customerId);
 
     List<OrderEntity> findByCustomerIdAndOrderStatus(Integer customerId, String orderStatus);
+
+    @Query("SELECT o FROM OrderEntity o WHERE o.shippingAddress.id = ?1 OR o.billingAddress.id = ?1")
+    List<OrderEntity> findOrdersByShippingOrBillingAddressId(Integer addressId);
 }

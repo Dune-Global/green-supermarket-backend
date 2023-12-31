@@ -7,6 +7,8 @@ import com.dune.greensupermarketbackend.customer.address.AddressEntity;
 import com.dune.greensupermarketbackend.customer.address.AddressRepository;
 import com.dune.greensupermarketbackend.customer.address.service.AddressService;
 import com.dune.greensupermarketbackend.exception.ResourceNotFoundException;
+import com.dune.greensupermarketbackend.order.OrderEntity;
+import com.dune.greensupermarketbackend.order.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class AddressServiceImpl implements AddressService {
     private AddressRepository addressRepository;
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
+    private OrderRepository orderRepository;
 
     @Override
     public AddressDto createAddress(AddressDto addressDto) {
@@ -86,8 +89,15 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteAddress(Integer addressId) {
-        addressRepository.findById(addressId)
+        AddressEntity address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found with id " + addressId));
-        addressRepository.deleteById(addressId);
+
+        List<OrderEntity> orders = orderRepository.findOrdersByShippingOrBillingAddressId(addressId);
+        if (orders.isEmpty()) {
+            addressRepository.deleteById(addressId);
+        } else {
+            address.setCustomer(null);
+            addressRepository.save(address);
+        }
     }
 }
