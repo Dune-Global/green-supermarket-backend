@@ -12,6 +12,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        jdbc:
+          time_zone: Asia/Kolkata
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
@@ -21,16 +23,17 @@ spring:
       max-request-size: -1
 
   azure:
+    base:
+      uri: https://greensupermarketstoreacc.blob.core.windows.net/greensupermarketblogcontainer/
     storage:
       container:
         name: greensupermarketblogcontainer
       connection:
         string: DefaultEndpointsProtocol=https;AccountName=greensupermarketstoreacc;AccountKey=fGIpZLaa/xXYrR/98HuVDVRWfUmEPHhRWlnYesob00ejEAh04jk6wm9HZVpb9s3u6hq3wC/hLitE+AStuQifMA==;EndpointSuffix=core.windows.net
-
   mail:
     host: smtp.gmail.com
-    username: info.duneglobal@gmail.com
-    password: zxtyyjxccxtpqtio
+    username: shop.greensupermarket@gmail.com
+    password: sghp yiwe vszi mboq
     port: 587
     properties:
       mail:
