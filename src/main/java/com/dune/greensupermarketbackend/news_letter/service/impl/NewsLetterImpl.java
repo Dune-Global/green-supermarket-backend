@@ -22,8 +22,9 @@ public class NewsLetterImpl implements NewsLetterService {
     private final ModelMapper modelMapper;
     private final MailService mailService;
 
-    public NewsLetterImpl(NewsLetterRepository newsLetterRepository) {
+    public NewsLetterImpl(NewsLetterRepository newsLetterRepository, MailService mailService) {
         this.newsLetterRepository = newsLetterRepository;
+        this.mailService = mailService;
         this.modelMapper = new ModelMapper();
     }
 
