@@ -110,4 +110,9 @@ public class ProductController {
     public List<ProductResponseDto> getTop10BestSellingProducts() {
         return productService.getTop10BestSellingProducts();
     }
+
+    @GetMapping("/top-deals")
+    public List<ProductResponseDto> getTopDeals() {
+        return productService.getTopDeals();
+    }
 }
