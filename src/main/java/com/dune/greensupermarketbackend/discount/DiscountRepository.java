@@ -20,4 +20,7 @@ public interface DiscountRepository extends JpaRepository<DiscountEntity,Integer
 
     @Query("SELECT d FROM DiscountEntity d WHERE d.product.productId = :productId AND d.id != :discountId AND ((d.startDate BETWEEN :startDate AND :endDate) OR (d.endDate BETWEEN :startDate AND :endDate))")
     List<DiscountEntity> findDiscountsForProductInTimeRange(Integer productId, LocalDateTime startDate, LocalDateTime endDate, Integer discountId);
+
+    @Query("SELECT d FROM DiscountEntity d ORDER BY d.rate DESC")
+    List<DiscountEntity> findAllOrderByDiscountRateDesc();
 }

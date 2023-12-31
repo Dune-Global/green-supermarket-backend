@@ -371,4 +371,22 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductResponseDto> getTopDeals() {
+        List<DiscountEntity> discounts = discountRepository.findAllOrderByDiscountRateDesc();
+        return discounts.stream()
+                .map(discount -> {
+                    ProductResponseDto productResponseDto = modelMapper.map(discount.getProduct(), ProductResponseDto.class);
+                    DiscountEntity discountEntity = discountRepository.findCurrentDiscountForProduct(discount.getProduct().getProductId());
+                    if (discountEntity != null) {
+                        DiscountDto discountDto = modelMapper.map(discountEntity, DiscountDto.class);
+                        productResponseDto.setDiscount(discountDto);
+                    }
+                    productResponseDto.setCurrentPrice(getDiscountedPrice(discount.getProduct()));
+                    productResponseDto.setRating(getRate(discount.getProduct()));
+                    return productResponseDto;
+                })
+                .collect(Collectors.toList());
+    }
+
 }

@@ -29,4 +29,5 @@ public interface ProductService {
     List<BrandDto> findBrandsOfSubCat(Integer subCatOneId);
     List<ProductResponseDto> getFilteredProducts(Integer mainCatId, Integer subCatId, Double minPrice, Double maxPrice);
     List<ProductResponseDto> getTop10BestSellingProducts();
+    List<ProductResponseDto> getTopDeals();
 }
