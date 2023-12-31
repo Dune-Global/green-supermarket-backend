@@ -48,23 +48,23 @@ public class NewsLetterImpl implements NewsLetterService {
 
         String htmlBody =
                 "<!DOCTYPE html>" +
-                        "<html>" +
-                        "<head>" +
-                        "<link href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet'>" +
-                        "<style>" +
-                        "body { font-family: 'Poppins', sans-serif; }" +
-                        "h3 { color: #191919; }" +
-                        "p { color: rgb(71, 71, 71); }" +
-                        "</style>" +
-                        "</head>" +
-                        "<body>" +
-                        "<h3>Thank you for subscribing to our newsletter!</h3>" +
+                        "<html>"  +
+                        "<head>"  +
+                        "<link href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet'>"  +
+                        "<style>"  +
+                        "body { font-family: 'Poppins', sans-serif; }"  +
+                        "h3 { color: #191919; }"  +
+                        "p { color: rgb(71, 71, 71); }"  +
+                        "</style>"  +
+                        "</head>"  +
+                        "<body>"  +
+                        "<h3>Thank you for subscribing to our newsletter!</h3>"  +
                         "<p>Hi,</p>" +
-                        "<p>We're excited to have you on board. You can look forward to updates, exclusive offers, and much more delivered straight to your inbox.</p>" +
-                        "<p>Thank you,</p>" +
-                        "<p><span style=\"color: #00b207; font-weight: 500\">GREEN </span><span style=\"color: black; font-weight: 500\">SUPERMARKET</span></p>" +
-                        "</body>" +
-                        "</html>";
+                        "<p>We're excited to have you on board. You can look forward to updates, exclusive offers, and much more delivered straight to your inbox.</p>"  +
+                        "<p>Thank you,</p>"  +
+                        "<p><span style=\"color: #00b207; font-weight: 500\">GREEN </span><span style=\"color: black; font-weight: 500\">SUPERMARKET</span></p>"  +
+                        "</body>"  +
+                        "</html>" ;
 
         EmailData emailData = new EmailData(
                 newsLetterDto.getEmail(),
