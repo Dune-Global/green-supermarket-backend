@@ -250,8 +250,8 @@ public class OrderServiceImpl implements OrderService {
         StringBuilder tableRows = new StringBuilder();
         for (OrderItemDto item : orderDto1.getOrderItems()) {
             tableRows.append(String.format(
-                    "<tr><td>%s</td><td>%d</td><td>%.2f</td></tr>",
-                    item.getProductName(), item.getQuantity(), item.getPrice()
+                    "<tr><td>%s</td><td>LKR %.2f</td><td>%d</td><td>LKR %.2f</td></tr>",
+                    item.getProductName(), item.getPrice()- item.getDiscount()/ item.getQuantity(), item.getQuantity(), (item.getPrice()- item.getDiscount()/ item.getQuantity()) * item.getQuantity()
             ));
         }
 
@@ -259,24 +259,30 @@ public class OrderServiceImpl implements OrderService {
                 "<!DOCTYPE html>" +
                         "<html>" +
                         "<head>" +
+                        "<link href='https://fonts.googleapis.com/css2?family=Poppins&display=swap' rel='stylesheet'>" +
                         "<style>" +
-                        "p { color: green; }" +
-                        "table { width: 100%; }" +
-                        "th, td { border: 1px solid black; padding: 5px; text-align: left; }" +
+                        "body { font-family: \"Poppins\", sans-serif; }" +
+                        "h3 { color: #191919; }" +
+                        "p { color: rgb(71, 71, 71); }" +
+                        "table { font-size: 14px; }" +
+                        "th { border: solid 1px rgb(194, 194, 194); text-align: left; font-weight: 500; padding-top: 16px; padding-bottom: 16px; padding-left: 20px; padding-right: 20px; color: #00b207; }" +
+                        "td { border: solid 1px rgb(194, 194, 194); text-align: left; font-weight: 400; padding-left: 20px; padding-right: 20px; padding-top: 8px; padding-bottom: 8px; }" +
                         "</style>" +
                         "</head>" +
                         "<body>" +
-                        "<p>Hi " +
-                        order.getCustomer().getFirstname()+" " +order.getCustomer().getLastname()+
-                        "</p><p>Your order has been placed successfully. Your order id is " +
-                        order.getOrderId() +
-                        "</p><p>You can view your order details in your account.</p>" +
+                        "<p style=\"padding-top: 40px;\"><strong>Hi " + order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname() + ",</strong></p>" +
+                        "<p>Your order has been placed successfully. Your order id is <strong>" + order.getOrderId() + "</strong>.</p>" +
+                        "<p>You can view your order details in your account.</br><a href='https://shop.green-supermarket.com/order-history'>View order details</a></p>" +
+                        "<br />" +
                         "<table>" +
-                        "<tr><th>Product Name</th><th>Quantity</th><th>Price</th></tr>" +
+                        "<tr><th>Product Name</th><th>Unit Price</th><th>Quantity</th><th>Total Price</th></tr>" +
                         tableRows.toString() +
+                        "<tr><td colspan=\"3\" style=\"font-weight: 600;\">Shipping</td><td style=\"font-weight: 600;\">LKR 0.00</td></tr>" +
+                        "<tr><td colspan=\"3\" style=\"font-weight: 600; color: #00b207;\">Total</td><td style=\"font-weight: 600; color: #00b207;\">LKR " + order.getTotalAmount() + "</td></tr>" +
                         "</table>" +
-                        "<p>Thanks,</p>" +
-                        "<p>Green Supermarket</p>" +
+                        "<br />" +
+                        "<p>Thank you.</p>" +
+                        "<p><a href='https://shop.green-supermarket.com'><span style=\"color: #00b207; font-weight: 500\">GREEN </span><span style=\"color: black; font-weight: 500\">SUPERMARKET</span></a></p>" +
                         "</body>" +
                         "</html>";
 
