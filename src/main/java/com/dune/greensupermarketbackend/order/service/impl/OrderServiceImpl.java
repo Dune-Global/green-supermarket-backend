@@ -291,7 +291,7 @@ public class OrderServiceImpl implements OrderService {
         EmailData emailData = new EmailData(
         order.getCustomer().getEmail(),
         order.getCustomer().getEmail(),
-        "Order Successfully",
+        "Order Successful",
         htmlBody
         );
 
