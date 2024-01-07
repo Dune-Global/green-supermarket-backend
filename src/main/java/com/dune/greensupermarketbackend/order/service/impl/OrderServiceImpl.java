@@ -302,7 +302,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponseDto> getAllOrders() {
-        List<OrderEntity> orders = orderRepository.findAll();
+        List<OrderEntity> orders = orderRepository.findAllByOrderByOrderDateDesc();
         return orders.stream().map(order->{
                     OrderResponseDto orderResponseDto = modelMapper.map(orderMapper(order),OrderResponseDto.class);
                     orderResponseDto.setBillingAddress(modelMapper.map(order.getBillingAddress(),AddressDto.class));
