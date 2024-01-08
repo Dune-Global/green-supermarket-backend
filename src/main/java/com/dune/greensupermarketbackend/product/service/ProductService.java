@@ -12,7 +12,7 @@ public interface ProductService {
 
     ProductResponseMessageDto addProduct(ProductDto productDto, String imgUrl);
 
-    ProductResponseMessageDto updateProduct(Integer id, ProductDto productDto);
+    ProductResponseMessageDto updateProduct(Integer id, ProductDto productDto, String imgUrl);
 
     ProductResponseMessageDto deleteProduct(Integer id);
 

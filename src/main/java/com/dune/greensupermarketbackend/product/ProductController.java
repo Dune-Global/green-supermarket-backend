@@ -43,7 +43,8 @@ public class ProductController {
 
     @PatchMapping("update-product/{id}")
     public ResponseEntity<ProductResponseMessageDto> updateProduct(@PathVariable Integer id,
-            @RequestBody ProductDto productDto) {
+            @RequestBody ProductDto productDto,
+            @RequestHeader("imgUrl") String imgUrl) {
         ProductResponseMessageDto productResponseMessageDto = productService.updateProduct(id, productDto);
         return new ResponseEntity<>(productResponseMessageDto, HttpStatus.OK);
     }
