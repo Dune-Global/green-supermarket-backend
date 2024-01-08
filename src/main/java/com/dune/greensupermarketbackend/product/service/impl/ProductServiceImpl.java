@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
 }
 
     @Override
-    public ProductResponseMessageDto updateProduct(Integer id, ProductDto productDto) {
+    public ProductResponseMessageDto updateProduct(Integer id, ProductDto productDto, String imgUrl) {
        System.out.println(id); 
     ProductEntity existingProduct = productRepository.findById(id)
             .orElseThrow(() -> new APIException(HttpStatus.NOT_FOUND, "Product not found!"));
@@ -159,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
     existingProduct.setStockKeepingUnits(productDto.getStockKeepingUnits());
     existingProduct.setStockAvailableUnits(productDto.getStockAvailableUnits());
     existingProduct.setBrand(brand);
-    existingProduct.setProductImage(productDto.getProductImage());
+    existingProduct.setProductImage(imgUrl);
     existingProduct.setMainCategory(mainCategory);
     existingProduct.setL1Category(categoryOne);
     existingProduct.setL2Category(categoryTwo);
