@@ -159,6 +159,7 @@ public class ProductServiceImpl implements ProductService {
     existingProduct.setStockKeepingUnits(productDto.getStockKeepingUnits());
     existingProduct.setStockAvailableUnits(productDto.getStockAvailableUnits());
     existingProduct.setBrand(brand);
+    existingProduct.setProductImage(productDto.getProductImage());
     existingProduct.setMainCategory(mainCategory);
     existingProduct.setL1Category(categoryOne);
     existingProduct.setL2Category(categoryTwo);
