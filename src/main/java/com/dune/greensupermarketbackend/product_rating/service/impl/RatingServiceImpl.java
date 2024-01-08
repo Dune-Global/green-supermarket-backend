@@ -79,7 +79,8 @@ public class RatingServiceImpl implements RatingService {
                 .orElseThrow(  () -> new APIException(HttpStatus.NOT_FOUND,"Order Item not found with Id: " + ratingDto.getOrderItemId())
                 );
 
-        if(orderItem.getOrder().getOrderStatus().equals("Delivered")){
+        // check if the customer received the item.
+        if(!orderItem.getOrder().getOrderStatus().equals("Delivered")){
             throw new APIException(HttpStatus.BAD_REQUEST,"You can't rate this product because it is not delivered yet.");
         }
 
