@@ -45,7 +45,7 @@ public class ProductController {
     public ResponseEntity<ProductResponseMessageDto> updateProduct(@PathVariable Integer id,
             @RequestBody ProductDto productDto,
             @RequestHeader("imgUrl") String imgUrl) {
-        ProductResponseMessageDto productResponseMessageDto = productService.updateProduct(id, productDto);
+        ProductResponseMessageDto productResponseMessageDto = productService.updateProduct(id, productDto, imgUrl);
         return new ResponseEntity<>(productResponseMessageDto, HttpStatus.OK);
     }
 
